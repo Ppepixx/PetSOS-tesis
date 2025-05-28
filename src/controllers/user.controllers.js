@@ -89,4 +89,32 @@ export const eliminarUsuario = async (req, res) => {
         // Captura errores y responde con un 500
         return res.status(500).json({ message: "El usuario no se pudo eliminar" });
     }
+    
+}
+// controllers/user.controllers.js
+export const updateUserProfile = async (req, res) => {
+  try {
+    const userId = req.user.id; // id del usuario autenticado
+    const camposUpdate = ["username", "email", "direccion", "telefono", "fechadnacimiento", "contra"];
+    const updates = {};
+
+    camposUpdate.forEach((campo) => {
+      if (req.body[campo] !== undefined) {
+        updates[campo] = req.body[campo];
+      }
+    });
+
+    if (updates.contra) {
+      const salt = 12;
+      updates.contra = await bcrypt.hash(updates.contra, salt);
+    }
+
+    const user = await Usuario.findByIdAndUpdate(userId, updates, { new: true });
+    if (!user) return res.status(404).json({ message: "Usuario no encontrado" });
+
+    res.json({ message: "Perfil actualizado correctamente", user });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error al actualizar perfil" });
+  }
 };
