@@ -4,7 +4,7 @@ import Publi from "../models/publi.model.js"
 
 export const obternerPublis = async (req, res)=>{
     try{
-        const publis = await Publi.find()
+        const publis = await Publi.find().populate("autor", "username email");
 
         if (publis){
             res.json({publis})
