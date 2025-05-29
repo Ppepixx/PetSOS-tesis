@@ -22,7 +22,4 @@ export const publiSchema= z.object({
         required_error:"La ubicacion es requerida"
     }) 
 
-
-
-
 })

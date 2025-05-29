@@ -7,6 +7,7 @@ import LoginPage from "./pages/loginPage.jsx";
 import InicioPage from "./pages/inicioPage.jsx";
 import RegisterPage from "./pages/registerPage.jsx";
 import PubliPage from "./pages/publiPage.jsx";
+import CrearPubliPage from "./pages/crearPubliPage.jsx";
 
 
 
@@ -23,6 +24,7 @@ function App() {
 
             <Route element={<RutaProtegida />}>
               <Route path="/publi" element={<PubliPage /> }/>
+              <Route path="/crear-publi" element={<CrearPubliPage />}/>
             </Route>
 
           </Routes>
