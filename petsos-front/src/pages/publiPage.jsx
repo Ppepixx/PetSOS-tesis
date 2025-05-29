@@ -48,7 +48,7 @@ const PubliPage = () => {
         <div className="min-h-screen flex flex-col bg-orange-50">
             <Header/>
             <div className="px-6 py-2">
-                <div className="max-w-7xl bg-orange-200 mx-auto px-4 sm:px-6 lg:px-8 mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div className="max-w-7xl bg-orange-200 rounded-2xl mx-auto px-4 sm:px-6 lg:px-8 mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <div className="flex items-center gap-3 flex-wrap">
                         <label className="font-semibold text-black">Filtrar por tipo:</label>
                         {["perdida", "rescate", "adopcion"].map((tipo) => (
@@ -73,7 +73,7 @@ const PubliPage = () => {
                     </div>
 
                     <button
-                        className="bg-red-400 hover:bg-red-500 text-white px-4 py-2 rounded-md text-sm transition"
+                        className="bg-red-400 hover:bg-red-500 text-white px-4 py-2 m-2 rounded-md text-sm transition"
                         onClick={() => {
                             window.location.href = "/crear-publicacion";
                         }}
@@ -159,7 +159,7 @@ const PubliCard = ({ publi, onLike, onClick }) => {
 
                 <div className="p-4">
                     <h2 className="text-lg font-bold text-gray-800 mb-1">{publi.titulo}</h2>
-                    <p className="text-gray-700 text-sm mb-2">{publi.descripcion}</p>
+                    <p className="text-gray-700 text-sm mb-2 line-clamp-2">{publi.descripcion}</p>
 
                     <div className="text-sm text-gray-600 mb-2">
                         <p><strong>Tipo:</strong> {publi.tipo}</p>
