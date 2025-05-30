@@ -192,7 +192,7 @@ const RegisterPage = () => {
                     <div className="text-sm text-center mt-4 text-gray-600">
                         ¿Ya tienes una cuenta?{" "}
                         <a href="/login" className="text-orange-600 font-semibold hover:underline">
-                            Regístrate
+                            Iniciar Sesion
                         </a>
                     </div>
                 </div>

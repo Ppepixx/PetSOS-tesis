@@ -18,11 +18,11 @@ export const obternerPublis = async (req, res)=>{
 
 // Para poder crear las publicaciones
 
-export const crearPubli = async (req, res)=>{
+export const crearPubli = async (req, res) => {
     try {
-        const {titulo, descripcion, imgURL, tipo, ubicacion  }= req.body;
+        const { titulo, descripcion, tipo, ubicacion } = req.body;
+        const autorId = req.user?.id;
 
-        const autorId = req.user?.id; 
         if (!autorId) {
             return res.status(401).json({ message: "No autorizado. Usuario no autenticado." });
         }
@@ -30,22 +30,22 @@ export const crearPubli = async (req, res)=>{
         const nuevaPubli = new Publi({
             titulo,
             descripcion,
-            imgURL,
+            imgURL: req.file?.filename || "",
             autor: autorId,
             tipo,
             ubicacion: {
                 comuna: ubicacion?.comuna,
                 ciudad: ubicacion?.ciudad,
                 region: ubicacion?.region
-            }
-        })
+        }
+        });
 
-        const guardarPubli= await nuevaPubli.save()
-        res.json(guardarPubli)
+        const guardarPubli = await nuevaPubli.save();
+        res.json(guardarPubli);
     } catch (error) {
-        return res.status(500).json ({message: "La publicacion no se pudo crear"})
+        return res.status(500).json({ message: "La publicacion no se pudo crear" });
     }
-}
+};
 
 export const actualizarPubli = async (req, res) => {
     try {
