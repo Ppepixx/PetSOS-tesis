@@ -1,5 +1,8 @@
-import axios from "./axios.js"
+import axios from "./axios"; 
 
-export const crearPublicacion = async (publi) =>{
-    return await axios.post ("/petsos/crearPubli", publi)
-}
+export const crearPublicacion = (formData) =>
+    axios.post("/petsos/crearPubli", formData, {
+        headers: {
+            "Content-Type": "multipart/form-data",
+        },
+    });

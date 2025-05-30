@@ -117,7 +117,7 @@ const PubliPage = () => {
                     <p className="text-gray-700 mb-2">{publiSeleccionada.descripcion}</p>
                     {publiSeleccionada.imgURL && (
                         <img
-                        src={publiSeleccionada.imgURL}
+                        src={`http://localhost:4000/uploads/${publiSeleccionada.imgURL}`}
                         alt={publiSeleccionada.titulo}
                         className="w-full h-auto rounded-md mb-2 object-cover max-h-80"
                         />
@@ -151,7 +151,7 @@ const PubliCard = ({ publi, onLike, onClick }) => {
 
                 {publi.imgURL && (
                     <img
-                        src={publi.imgURL}
+                        src={`http://localhost:4000/uploads/${publi.imgURL}`}
                         alt={publi.titulo}
                         className="w-full h-60 object-cover"
                     />

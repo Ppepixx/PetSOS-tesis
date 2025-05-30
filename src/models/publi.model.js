@@ -12,7 +12,7 @@ const publiSchema = new mongoose.Schema({
         required: true
     },
     imgURL: {
-        type: String,
+        type: [String],
         required: true
     },
     f_creacion: {

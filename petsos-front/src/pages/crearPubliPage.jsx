@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form"
 import Header from "../components/header.jsx"
 import { usePubli } from "../context/PublicacionContext.jsx"
-
+import { toast } from "react-toastify";
 
 const CrearPubliPage = ()=>{
     const { register, handleSubmit, reset } = useForm();
@@ -40,11 +40,12 @@ const CrearPubliPage = ()=>{
             <form
             onSubmit={onSubmit}
             className="w-full max-w-2xl bg-white shadow-2xl rounded-3xl p-10 space-y-6 m-5"
+            encType="multipart/form-data"
             >
             <h2 className="text-4xl font-bold text-center text-zinc-800 mb-6">Crear Publicación</h2>
 
             <div>
-                <label htmlFor="titulo" className="block text-sm font-semibold text-zinc-700 mb-1">
+                <label htmlFor="titulo" className="block text-sm font-semibold text-zinc-700 mb-1 border-t">
                 Título
                 </label>
                 <input
@@ -56,7 +57,7 @@ const CrearPubliPage = ()=>{
             </div>
 
             <div>
-                <label htmlFor="descripcion" className="block text-sm font-semibold text-zinc-700 mb-1">
+                <label htmlFor="descripcion" className="block text-sm font-semibold text-zinc-700 mb-1 border-t">
                 Descripción
                 </label>
                 <textarea
@@ -68,7 +69,7 @@ const CrearPubliPage = ()=>{
             </div>
 
             <div>
-                <label htmlFor="imgURL" className="block text-sm font-semibold text-zinc-700 mb-1">
+                <label htmlFor="imgURL" className="block text-sm font-semibold text-zinc-700 mb-1 border-t">
                 Imagen (.png)
                 </label>
                 <input
@@ -80,7 +81,7 @@ const CrearPubliPage = ()=>{
             </div>
 
             <div>
-                <label className="block text-sm font-semibold text-zinc-700 mb-2">Tipo</label>
+                <label className="block text-sm font-semibold text-zinc-700 mb-2 border-t">Tipo</label>
                 <div className="flex flex-col sm:flex-row gap-4">
                 {["rescate", "adopcion", "perdida"].map((tipo) => (
                     <label key={tipo} className="flex items-center gap-2 text-zinc-700">
@@ -96,12 +97,12 @@ const CrearPubliPage = ()=>{
                 </div>
             </div>
 
-            <fieldset className="border-t pt-6">
-                <legend className="text-lg font-semibold text-zinc-800 mb-4">Ubicación</legend>
+            <fieldset className="pt-6">
+                <legend className="text-lg font-semibold text-zinc-800 mb-3">Ubicación</legend>
 
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 ">
                 <div>
-                    <label htmlFor="region" className="block text-sm font-semibold text-zinc-700 mb-1">
+                    <label htmlFor="region" className="block text-sm font-semibold text-zinc-700 mb-1 border-t">
                     Región
                     </label>
                     <input
@@ -114,7 +115,7 @@ const CrearPubliPage = ()=>{
                 </div>
 
                 <div>
-                    <label htmlFor="ciudad" className="block text-sm font-semibold text-zinc-700 mb-1">
+                    <label htmlFor="ciudad" className="block text-sm font-semibold text-zinc-700 mb-1 border-t">
                     Ciudad
                     </label>
                     <input
@@ -127,7 +128,7 @@ const CrearPubliPage = ()=>{
                 </div>
 
                 <div>
-                    <label htmlFor="comuna" className="block text-sm font-semibold text-zinc-700 mb-1">
+                    <label htmlFor="comuna" className="block text-sm font-semibold text-zinc-700 mb-1 border-t">
                     Comuna
                     </label>
                     <input
@@ -141,7 +142,6 @@ const CrearPubliPage = ()=>{
                 </div>
             </fieldset>
 
-            {/* Botón */}
             <div className="text-center pt-4">
                 <button
                 type="submit"

@@ -16,14 +16,24 @@ export const usePubli= ()=>{
 export function PubliProvider({children}){
     const [publis, setPublis]= useState([])
 
-    const crearPubli = async (publi)=>{
+    const crearPubli = async (publi) => {
         try {
-            const response = await crearPublicacion(publi)
-            setPublis([...publis, response.data])
+            const formData = new FormData();
+            formData.append("titulo", publi.titulo);
+            formData.append("descripcion", publi.descripcion);
+            formData.append("imgURL", publi.imgURL[0]); // importante: [0] para tomar el archivo
+            formData.append("tipo", publi.tipo);
+
+            formData.append("ubicacion[region]", publi.ubicacion.region);
+            formData.append("ubicacion[ciudad]", publi.ubicacion.ciudad);
+            formData.append("ubicacion[comuna]", publi.ubicacion.comuna);
+
+            const response = await crearPublicacion(formData);
+            setPublis([...publis, response.data]);
         } catch (error) {
-            console.error("Error al crear el producto:", error)
+            console.error("Error al crear la publicación:", error);
         }
-    }
+    };
 
     return (
         <PubliContext.Provider value={{ 
