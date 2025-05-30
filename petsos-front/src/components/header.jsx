@@ -22,7 +22,7 @@ const Header = () => {
 
                 {isAuthenticated ? (
                     <>
-                        <span className="text-sm md:text-base text-gray-600">🐾 {user.username}</span>
+                        <a className="text-sm md:text-base text-gray-600 " href="/perfil"> 🐾 {user.username}</a>
                         <Link
                             onClick={() => logout()}
                             to="/"
