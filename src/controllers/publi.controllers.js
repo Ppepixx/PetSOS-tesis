@@ -105,3 +105,35 @@ export const eliminarPubli = async (req, res) => {
         return res.status(500).json({ message: "Error del servidor al eliminar la publicación" });
     }
 };
+
+export const agregarComentario = async (req, res) => {
+    try {
+        const { texto } = req.body;
+        const publicacionId = req.params.id;
+        const autorId = req.user?.id;
+
+        if (!autorId) {
+            return res.status(401).json({ message: "No autorizado" });
+        }
+
+        const publicacion = await Publi.findById(publicacionId);
+        if (!publicacion) {
+            return res.status(404).json({ message: "Publicación no encontrada" });
+        }
+
+        publicacion.comentarios.push({
+            autor: autorId,
+            texto: texto
+        });
+
+        await publicacion.save();
+
+        const publicacionActualizada = await Publi.findById(publicacionId)
+            .populate("comentarios.autor", "username");
+
+        res.json(publicacionActualizada);
+    } catch (error) {
+        console.error("Error al agregar comentario:", error);
+        res.status(500).json({ message: "Error al agregar comentario" });
+    }
+};

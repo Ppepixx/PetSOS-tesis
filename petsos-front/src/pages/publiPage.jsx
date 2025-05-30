@@ -125,6 +125,21 @@ const PubliPage = () => {
                     <p className="text-sm text-gray-500 mt-2">
                         Tipo: {publiSeleccionada.tipo} | Región: {publiSeleccionada?.ubicacion?.region}
                     </p>
+                    <div className="mt-4">
+                            <h4 className="text-lg font-semibold text-gray-800 mb-2">💬 Comentarios</h4>
+                            {publiSeleccionada.comentarios && publiSeleccionada.comentarios.length > 0 ? (
+                                <ul className="space-y-2 max-h-48 overflow-y-auto pr-2">
+                                {publiSeleccionada.comentarios.map((comentario) => (
+                                    <li key={comentario._id} className="bg-gray-100 p-2 rounded">
+                                        <p className="text-sm text-gray-700">{comentario.texto}</p>
+                                        <p className="text-xs text-gray-500 text-right">— {comentario.autor?.username || "Anónimo"}</p>
+                                    </li>
+                                ))}
+                                </ul>
+                            ) : (
+                                <p className="text-sm text-gray-500">No hay comentarios aún.</p>
+                            )}
+                    </div>
                     </div>
                 </div>
             )}
@@ -178,10 +193,6 @@ const PubliCard = ({ publi, onLike, onClick }) => {
                         >
                             <span>❤️</span>
                             <span>{publi.likes?.length || 0}</span>
-                        </button>
-
-                        <button className="text-sm text-blue-600 hover:underline">
-                            Ver comentarios
                         </button>
                     </div>
                 </div>

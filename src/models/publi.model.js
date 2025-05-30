@@ -35,14 +35,14 @@ const publiSchema = new mongoose.Schema({
         region: String,
     },
     comentarios: [{
-        usuario: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Usuario"
+        autor: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Usuario"
         },
         texto: String,
         fecha: {
-        type: Date,
-        default: Date.now
+            type: Date,
+            default: Date.now
         }
     }],
     likes: [{
