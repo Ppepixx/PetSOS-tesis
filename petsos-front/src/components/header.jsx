@@ -18,7 +18,7 @@ const Header = () => {
                 <Link to="/publi" className="hover:text-orange-500 transition">Publicaciones</Link>
                 <Link to="/adoptar" className="hover:text-orange-500 transition">Adoptar</Link>
                 <Link to="/consejos" className="hover:text-orange-500 transition">Consejos</Link>
-                <Link to="/ayuda" className="hover:text-orange-500 transition">Ayuda</Link>
+                <Link to="/FAQ" className="hover:text-orange-500 transition">FAQ</Link>
 
                 {isAuthenticated ? (
                     <>

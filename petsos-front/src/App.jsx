@@ -9,7 +9,7 @@ import RegisterPage from "./pages/registerPage.jsx";
 import PubliPage from "./pages/publiPage.jsx";
 import CrearPubliPage from "./pages/crearPubliPage.jsx";
 import PerfilPage from "./pages/perfilPage.jsx";
-
+import FaqPage from "./pages/faqPage.jsx";
 
 
 function App() {
@@ -27,6 +27,7 @@ function App() {
               <Route path="/publi" element={<PubliPage /> }/>
               <Route path="/crear-publi" element={<CrearPubliPage />}/>
               <Route path="/perfil" element={<PerfilPage />} />
+              <Route path="/FAQ" element={<FaqPage />} />
             </Route>
 
           </Routes>
