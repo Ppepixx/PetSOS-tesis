@@ -117,8 +117,35 @@ export const verifyToken= async(req, res)=> {
             id: userFound._id,
             username: userFound.username,
             email: userFound.email,
+            direccion: userFound.direccion,
+            telefono: userFound.telefono,
+            fechadnacimiento: userFound.fechadnacimiento,
             roles: userFound.roles
 
         });
     });
+}
+
+export const updateProfile = async (req, res) => {
+  try {
+    const { username, email, direccion, telefono, fechadnacimiento } = req.body;
+    
+    const updatedUser = await Usuario.findByIdAndUpdate(
+      req.user.id,
+      { username, email, direccion, telefono, fechadnacimiento },
+      { new: true }
+    ).populate("roles");
+
+    res.json({
+      id: updatedUser._id,
+      username: updatedUser.username,
+      email: updatedUser.email,
+      direccion: updatedUser.direccion,
+      telefono: updatedUser.telefono,
+      fechadnacimiento: updatedUser.fechadnacimiento,
+      roles: updatedUser.roles.map(role => role.nombre)
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };

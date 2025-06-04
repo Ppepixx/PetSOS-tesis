@@ -7,6 +7,7 @@ import { createuser, deleteLastUser, eliminarUsuario, updateUser } from "../cont
 
 
 router.post("/", [authRequired, isAdmin] , createuser)
+
 //router.put("/update-profile", authRequired, updateUserProfile);
 router.put("/updateuser/:id",authRequired, isAdmin, updateUser)
 router.delete("/deleteUser/:id", authRequired, isAdmin, eliminarUsuario)

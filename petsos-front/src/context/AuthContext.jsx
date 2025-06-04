@@ -17,6 +17,10 @@ export const AuthProvider = ({children})=>{
     const [isAuthenticated, setIsAuthenticated]=useState(false);
     const [errors, setErrors] =useState([]);
     const [loading, setLoading] = useState(true);
+   const updateUser = (updatedData) => {
+  setUser(updatedData);
+};
+
     
     const signup= async (user) =>{
         try {
@@ -99,6 +103,7 @@ export const AuthProvider = ({children})=>{
             loading,
             isAuthenticated,
             errors,
+            updateUser
         }}>
             {children}
         </AuthContext.Provider>
