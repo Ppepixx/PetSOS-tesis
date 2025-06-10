@@ -87,7 +87,7 @@ const PubliPage = () => {
                         🐾 Publicaciones 🐾
                     </h2>
 
-                    <div className="flex flex-wrap gap-4">
+                    <div className="flex flex-wrap">
                         {publicaciones
                             .filter((publi) => !filtro || publi.tipo === filtro)
                             .map((publi) => (

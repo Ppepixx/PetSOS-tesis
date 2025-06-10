@@ -11,7 +11,6 @@ import CrearPubliPage from "./pages/crearPubliPage.jsx";
 import PerfilPage from "./pages/perfilPage.jsx";
 import FaqPage from "./pages/faqPage.jsx";
 
-
 function App() {
 
   return (

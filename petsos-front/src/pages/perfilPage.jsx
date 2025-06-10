@@ -1,6 +1,7 @@
 import { useState , useEffect} from "react";
 import { useAuth } from "../context/AuthContext.jsx";
 import Header from "../components/header";
+import MisPubliCard from "./misPubliCardPage.jsx";
 
 const PerfilPage = () => {
   const { user, isAuthenticated, loading, updateUser} = useAuth();
@@ -16,9 +17,6 @@ const PerfilPage = () => {
     fechadnacimiento: ''
   });
   const [message, setMessage] = useState({ type: '', text: '' });
-
-  
-
   // Inicializar formData cuando user cambie
   useEffect(() => {
   if (user) {
@@ -283,6 +281,9 @@ const PerfilPage = () => {
             )}
           </div>
         </div>
+      </div>
+      <div className="flex flex-col items-center px-4 py-6 my-2 bg-gray-200 min-h-screen">
+        <MisPubliCard/>
       </div>
     </div>
   );

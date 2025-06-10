@@ -32,6 +32,7 @@ export const updateUser = async(req, res)=>{
     }
 };
 
+
 export const deleteLastUser = async (req, res)=>{
     try {
 

@@ -5,7 +5,7 @@ const ListPubli = async () => {
         const response = await instance.get("/petsos/publis");
         return response.data.publis; 
     } catch (error) {
-        console.error("No se pudieron obtener los productos:", error);
+        console.error("No se pudieron obtener las publicaciones:", error);
         return [];
     }
 };

@@ -6,3 +6,19 @@ export const crearPublicacion = (formData) =>
             "Content-Type": "multipart/form-data",
         },
     });
+
+export const eliminarPublicacion = async (id) =>{
+    return await axios.delete(`/petsos/eliminar/${id}/publi`)
+}
+
+export const actualizarPublicacion = async (id, updatedData)=>{
+    return await axios.put(`/petsos/actualizar/${id}/publi`, updatedData, {
+        headers: {
+            "Content-Type": "multipart/form-data"
+        },
+    })
+}
+
+export const obtenerMisPublicaciones = async () => {
+    return await axios.get("/petsos/mis-publicaciones");
+};

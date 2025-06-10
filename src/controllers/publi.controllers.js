@@ -62,6 +62,9 @@ export const actualizarPubli = async (req, res) => {
         return res.status(403).json({ message: "No tienes permiso para actualizar esta publicación" });
         }
 
+        if (req.file){
+            updatedData.imgURL = [req.file.filename]
+        }
         // Actualizamos con los nuevos datos
         const publicacionActualizada = await Publi.findByIdAndUpdate(id, updatedData, {
         new: true, // Retorna el nuevo documento actualizado
@@ -81,7 +84,7 @@ export const actualizarPubli = async (req, res) => {
 
 export const eliminarPubli = async (req, res) => {
     try {
-        const { id } = req.params; // Este es el _id de MongoDB
+        const { id } = req.params; 
 
         const publicacion = await Publi.findById(id);
         if (!publicacion) {
@@ -135,5 +138,17 @@ export const agregarComentario = async (req, res) => {
     } catch (error) {
         console.error("Error al agregar comentario:", error);
         res.status(500).json({ message: "Error al agregar comentario" });
+    }
+};
+
+export const obtenerPublisPorUsuario = async (req, res) => {
+    try {
+        const autorId = req.user.id
+        const publicaciones = await Publi.find({ autor: autorId }).sort({ f_creacion: -1 });
+
+        res.status(200).json(publicaciones);
+    } catch (error) {
+        console.error("Error al obtener publicaciones del usuario:", error);
+        res.status(500).json({ message: "Error del servidor" });
     }
 };
