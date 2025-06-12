@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
+import Notificaciones from "./notificaciones.jsx"; // Asegúrate de que la ruta sea correcta
 
 const Header = () => {
     const { isAuthenticated, logout, user } = useAuth();
@@ -19,7 +20,6 @@ const Header = () => {
                 <Link to="/adoptar" className="hover:text-orange-500 transition">Adoptar</Link>
                 <Link to="/consejos" className="hover:text-orange-500 transition">Consejos</Link>
                 <Link to="/FAQ" className="hover:text-orange-500 transition">FAQ</Link>
-
                 {isAuthenticated ? (
                     <>
                         <a className="text-sm md:text-base text-gray-600 " href="/perfil"> 🐾 {user.username}</a>
@@ -48,6 +48,7 @@ const Header = () => {
                     </>
                 )}
             </nav>
+            <Notificaciones />
         </header>
     );
 };

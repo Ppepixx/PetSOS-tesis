@@ -1,4 +1,6 @@
 import Publi from "../models/publi.model.js"
+import Notificacion from "../models/notification.model.js";
+
 
 // Para poder mostrar las publicaciones
 
@@ -111,34 +113,44 @@ export const eliminarPubli = async (req, res) => {
 
 export const agregarComentario = async (req, res) => {
     try {
-        const { texto } = req.body;
-        const publicacionId = req.params.id;
-        const autorId = req.user?.id;
+    const { texto } = req.body;
+    const publicacionId = req.params.id;
+    const autorId = req.user?.id;
 
-        if (!autorId) {
-            return res.status(401).json({ message: "No autorizado" });
-        }
-
-        const publicacion = await Publi.findById(publicacionId);
-        if (!publicacion) {
-            return res.status(404).json({ message: "Publicación no encontrada" });
-        }
-
-        publicacion.comentarios.push({
-            autor: autorId,
-            texto: texto
-        });
-
-        await publicacion.save();
-
-        const publicacionActualizada = await Publi.findById(publicacionId)
-            .populate("comentarios.autor", "username");
-
-        res.json(publicacionActualizada);
-    } catch (error) {
-        console.error("Error al agregar comentario:", error);
-        res.status(500).json({ message: "Error al agregar comentario" });
+    if (!autorId) {
+      return res.status(401).json({ message: "No autorizado" });
     }
+
+    const publicacion = await Publi.findById(publicacionId).populate("autor");
+
+    if (!publicacion) {
+      return res.status(404).json({ message: "Publicación no encontrada" });
+    }
+
+    // Añadir comentario
+    publicacion.comentarios.push({ autor: autorId, texto });
+    await publicacion.save();
+
+    // Crear notificación automática solo si el autor del comentario no es el mismo que el autor de la publicación
+    if (String(autorId) !== String(publicacion.autor._id)) {
+      const nuevaNotificacion = new Notificacion({
+        receptor: publicacion.autor._id,
+        emisor: autorId,
+        mensaje: 'Han comentado tu publicación.',
+        link: `/perfil`
+      });
+
+      await nuevaNotificacion.save();
+    }
+
+    const publicacionActualizada = await Publi.findById(publicacionId)
+      .populate("comentarios.autor", "username");
+
+    res.json(publicacionActualizada);
+  } catch (error) {
+    console.error("Error al agregar comentario:", error);
+    res.status(500).json({ message: "Error al agregar comentario" });
+  }
 };
 
 export const obtenerPublisPorUsuario = async (req, res) => {
@@ -152,3 +164,28 @@ export const obtenerPublisPorUsuario = async (req, res) => {
         res.status(500).json({ message: "Error del servidor" });
     }
 };
+
+
+// Obtener todas las notificaciones del usuario autenticado
+export const obtenerNotificacion = async (req, res) => {
+  try {
+    const userId = req.user?.id;
+
+    if (!userId) {
+      return res.status(401).json({ message: "No autorizado" });
+    }
+
+    const notificaciones = await Notificacion.find({ receptor: userId })
+      .populate("emisor", "username")
+      .sort({ fecha: -1 });
+
+    res.status(200).json(notificaciones);
+  } catch (error) {
+    console.error("Error al obtener notificaciones:", error);
+    res.status(500).json({ message: "Error al obtener notificaciones" });
+  }
+};
+
+
+
+

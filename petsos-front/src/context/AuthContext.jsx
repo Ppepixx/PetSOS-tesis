@@ -17,24 +17,25 @@ export const AuthProvider = ({children})=>{
     const [isAuthenticated, setIsAuthenticated]=useState(false);
     const [errors, setErrors] =useState([]);
     const [loading, setLoading] = useState(true);
+    const [token, setToken] = useState(null); // Nuevo estado para el token
+    
     const updateUser = (updatedData) => {
         setUser(updatedData);
     };
 
-    
     const signup= async (user) =>{
         try {
             const res= await registerInfo(user);
             console.log(res.data);
             setUser(res.data);
             setIsAuthenticated(true);
+            // Obtener el token de las cookies después del registro
+            const cookieToken = Cookies.get("token");
+            setToken(cookieToken);
         } catch (error) {
             setErrors(error.response.data);
         } 
     };
-
-    
-
 
     const signin= async (user)=>{
         try {
@@ -42,6 +43,9 @@ export const AuthProvider = ({children})=>{
             console.log(res)
             setUser(res.data);
             setIsAuthenticated(true);
+            // Obtener el token de las cookies después del login
+            const cookieToken = Cookies.get("token");
+            setToken(cookieToken);
         } catch (error) {
             if(Array.isArray(error.response.data)){
                 return setErrors(error.response.data)
@@ -53,7 +57,8 @@ export const AuthProvider = ({children})=>{
     const logout= async(user)=>{
         Cookies.remove("token")
         setIsAuthenticated(false);
-        setUser(null)
+        setUser(null);
+        setToken(null); // Limpiar el token del estado
     }; 
 
     useEffect(()=>{
@@ -72,22 +77,27 @@ export const AuthProvider = ({children})=>{
             if(!cookies.token){
                 setIsAuthenticated(false);
                 setLoading(false);
+                setToken(null);
                 return setUser(null);
             }
+            
             try{
                 const res= await verifyTokenRequest(cookies.token);
                 if(!res.data) {
                     setIsAuthenticated(false);
                     setLoading(false);
+                    setToken(null);
                     return;
                 }
 
                 setIsAuthenticated(true);
                 setUser(res.data);
+                setToken(cookies.token); // Establecer el token en el estado
                 setLoading(false);
             }catch(error){
                 setIsAuthenticated(false);
                 setUser(null);
+                setToken(null);
                 setLoading(false);
             }
         }
@@ -103,7 +113,8 @@ export const AuthProvider = ({children})=>{
             loading,
             isAuthenticated,
             errors,
-            updateUser
+            updateUser,
+            token // Exponer el token
         }}>
             {children}
         </AuthContext.Provider>
