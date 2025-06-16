@@ -30,7 +30,9 @@ const Header = () => {
                         >
                             Cerrar sesión
                         </Link>
+                        <Notificaciones />
                     </>
+                    
                 ) : (
                     <>
                         <Link
@@ -48,7 +50,6 @@ const Header = () => {
                     </>
                 )}
             </nav>
-            <Notificaciones />
         </header>
     );
 };
