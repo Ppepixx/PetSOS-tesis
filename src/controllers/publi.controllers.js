@@ -186,6 +186,25 @@ export const obtenerNotificacion = async (req, res) => {
   }
 };
 
+// Eliminar una notificación del usuario autenticado
+export const eliminarNotificacion = async (req, res) => {
+  try {
+    const notiId = req.params.id;
+
+    const notificacion = await Notificacion.findById(notiId);
+
+    if (!notificacion) {
+      return res.status(404).json({ message: "Notificación no encontrada" });
+    }
+
+    await Notificacion.findByIdAndDelete(notiId);
+
+    res.status(200).json({ message: "Notificación eliminada correctamente" });
+  } catch (error) {
+    console.error("Error al eliminar notificación:", error);
+    res.status(500).json({ message: "Error al eliminar notificación" });
+  }
+};
 
 
 

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { obtenerNotificaciones } from "../api/notificaciones";
+import { obtenerNotificaciones , eliminarNotificacion } from "../api/notificaciones";
 import { useAuth } from "../context/AuthContext.jsx";
 
 function Notificaciones() {
@@ -127,56 +127,72 @@ function Notificaciones() {
               ) : (
                 <div className="divide-y divide-pink-50">
                   {notificaciones.map((n, index) => (
-                    <div
-                      key={n._id || index}
-                      className={`group px-4 py-3 hover:bg-gradient-to-r hover:from-pink-25 hover:to-rose-25 transition-all duration-200 cursor-pointer ${
-                        !n.leido ? 'bg-pink-25 border-l-4 border-l-pink-400' : ''
-                      }`}
-                      onClick={() => manejarClickNotificacion(n.link)}
-                    >
-                      <div className="flex items-start gap-3">
-                        {/* Avatar/Icono */}
-                        <div className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-lg ${
-                          !n.leido 
-                            ? 'bg-gradient-to-r from-pink-100 to-rose-100' 
-                            : 'bg-gray-100'
-                        }`}>
-                          {getIconoTipo(n.mensaje)}
-                        </div>
+  <div
+    key={n._id || index}
+    className={`group px-4 py-3 hover:bg-gradient-to-r hover:from-pink-25 hover:to-rose-25 transition-all duration-200 cursor-pointer relative ${
+      !n.leido ? 'bg-pink-25 border-l-4 border-l-pink-400' : ''
+    }`}
+  >
+    <div className="flex items-start gap-3">
+      {/* Avatar/Icono */}
+      <div className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-lg ${
+        !n.leido 
+          ? 'bg-gradient-to-r from-pink-100 to-rose-100' 
+          : 'bg-gray-100'
+      }`}>
+        {getIconoTipo(n.mensaje)}
+      </div>
 
-                        {/* Contenido */}
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2 mb-1">
-                            <span className={`font-semibold text-sm ${
-                              !n.leido ? 'text-gray-900' : 'text-gray-600'
-                            }`}>
-                              {n.emisor?.username || 'Usuario'}
-                            </span>
-                            {!n.leido && (
-                              <div className="w-2 h-2 bg-pink-400 rounded-full"></div>
-                            )}
-                          </div>
-                          
-                          <p className={`text-sm leading-relaxed ${
-                            !n.leido ? 'text-gray-700' : 'text-gray-500'
-                          }`}>
-                            {n.mensaje}
-                          </p>
+      {/* Contenido */}
+      <div className="flex-1 min-w-0" onClick={() => manejarClickNotificacion(n.link)}>
+        <div className="flex items-center gap-2 mb-1">
+          <span className={`font-semibold text-sm ${
+            !n.leido ? 'text-gray-900' : 'text-gray-600'
+          }`}>
+            {n.emisor?.username || 'Usuario'}
+          </span>
+          {!n.leido && (
+            <div className="w-2 h-2 bg-pink-400 rounded-full"></div>
+          )}
+        </div>
+        
+        <p className={`text-sm leading-relaxed ${
+          !n.leido ? 'text-gray-700' : 'text-gray-500'
+        }`}>
+          {n.mensaje}
+        </p>
 
-                          <div className="flex items-center justify-between mt-2">
-                            <span className="text-xs text-gray-400">
-                              {formatearTiempo(n.fecha)}
-                            </span>
-                            {n.link && (
-                              <span className="text-xs text-pink-500 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center gap-1">
-                                Ver más <span>→</span>
-                              </span>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
+        <div className="flex items-center justify-between mt-2">
+          <span className="text-xs text-gray-400">
+            {formatearTiempo(n.fecha)}
+          </span>
+          {n.link && (
+            <span className="text-xs text-pink-500 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center gap-1">
+              Ver más <span>→</span>
+            </span>
+          )}
+        </div>
+      </div>
+    </div>
+
+    {/* Botón eliminar */}
+    <button
+      onClick={async () => {
+        try {
+          await eliminarNotificacion(token, n._id);
+          setNotificaciones(prev => prev.filter(item => item._id !== n._id));
+        } catch (error) {
+          console.error("Error al eliminar notificación:", error);
+        }
+      }}
+      className="absolute top-2 right-2 text-xs text-rose-400 hover:text-rose-600 transition-colors duration-200"
+      title="Eliminar notificación"
+    >
+      ✖
+    </button>
+  </div>
+))}
+
                 </div>
               )}
             </div>
