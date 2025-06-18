@@ -2,24 +2,22 @@ import {z} from "zod";
 
 export const publiSchema= z.object({
 
-    titulo: z.string({
-        required_error:"El titulo es requerido"
+    titulo: z.string().min(1, "El título es obligatorio"),
+
+    descripcion: z.string().min(1, "La descripción es obligatoria"),
+
+    imgURL: z.any().refine((file) => file?.length > 0, {
+        message: "Debes subir una imagen",
     }),
 
-    descripcion: z.object({
-        required_error:"La descripción es requerida"
-    }),
-
-    imgURL: z.object({
-        required_error:"La imagen es requerida"
-    }),
-
-    tipo: z.object({
-        required_error:"El tipo de publicación es requerido"
+    tipo: z.enum(["rescate", "adopcion", "perdida"], {
+        errorMap: () => ({ message: "Debes seleccionar un tipo" }),
     }),
 
     ubicacion: z.object({
-        required_error:"La ubicacion es requerida"
-    }) 
+        region: z.string().min(1, "La región es obligatoria"),
+        ciudad: z.string().min(1, "La ciudad es obligatoria"),
+        comuna: z.string().min(1, "La comuna es obligatoria"),
+    }),
 
 })

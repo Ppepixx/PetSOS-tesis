@@ -61,6 +61,7 @@ const CrearPubliPage = ()=>{
                     <input
                     type="text"
                     placeholder="Ingresa el título de la publicación"
+                    required
                     {...register("titulo")}
                     className="w-full px-4 py-3 rounded-lg bg-zinc-100 focus:outline-none focus:ring-2 focus:ring-orange-400"
                     />
@@ -73,6 +74,7 @@ const CrearPubliPage = ()=>{
                     <textarea
                     rows={4}
                     placeholder="Ingresa una descripción"
+                    required
                     {...register("descripcion")}
                     className="w-full px-4 py-3 rounded-lg bg-zinc-100 focus:outline-none focus:ring-2 focus:ring-orange-400"
                     />
@@ -85,6 +87,7 @@ const CrearPubliPage = ()=>{
                     <input
                     type="file"
                     accept="image/png"
+                    required
                     {...register("imgURL")}
                     className="w-full text-sm text-zinc-600"
                     />
@@ -100,6 +103,7 @@ const CrearPubliPage = ()=>{
                             value={tipo}
                             {...register("tipo")}
                             className="accent-orange-500"
+                            required
                         />
                         {tipo.charAt(0).toUpperCase() + tipo.slice(1)}
                         </label>
@@ -119,6 +123,7 @@ const CrearPubliPage = ()=>{
                         type="text"
                         id="region"
                         placeholder="Ej: Metropolitana"
+                        required
                         {...register("ubicacion.region")}
                         className="w-full px-4 py-3 rounded-lg bg-zinc-100 focus:outline-none focus:ring-2 focus:ring-orange-400"
                         />
@@ -132,6 +137,7 @@ const CrearPubliPage = ()=>{
                         type="text"
                         id="ciudad"
                         placeholder="Ej: Santiago"
+                        required
                         {...register("ubicacion.ciudad")}
                         className="w-full px-4 py-3 rounded-lg bg-zinc-100 focus:outline-none focus:ring-2 focus:ring-orange-400"
                         />
@@ -145,6 +151,7 @@ const CrearPubliPage = ()=>{
                         type="text"
                         id="comuna"
                         placeholder="Ej: La Florida"
+                        required
                         {...register("ubicacion.comuna")}
                         className="w-full px-4 py-3 rounded-lg bg-zinc-100 focus:outline-none focus:ring-2 focus:ring-orange-400"
                         />
