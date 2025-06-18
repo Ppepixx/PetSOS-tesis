@@ -43,7 +43,10 @@ const PubliPage = () => {
     const handleFiltro = (tipoSeleccionado) => {
         setFiltro(tipoSeleccionado);
     };
-    
+    if (publiSeleccionada) {
+  console.log("Autor seleccionado:", publiSeleccionada.autor);
+}
+
     return (
         <div className="min-h-screen flex flex-col bg-orange-50">
             <Header/>
@@ -111,6 +114,8 @@ const PubliPage = () => {
                         </div>
                         <div className="flex flex-col">
                             <span className="text-sm font-semibold text-gray-800">{publiSeleccionada.autor?.username || "Usuario desconocido"}</span>
+                            <span className="text-sm font-semibold text-blue-600">Correo: {publiSeleccionada.autor?.email || "Correo desconocido"}</span>
+                            <span className="text-sm font-semibold text-blue-600">Teléfono: {publiSeleccionada.autor?.telefono || "Telefono desconocido"}</span>
                         </div>
                     </div>
                     <h3 className="text-2xl font-bold mb-2 text-pink-600">{publiSeleccionada.titulo}</h3>

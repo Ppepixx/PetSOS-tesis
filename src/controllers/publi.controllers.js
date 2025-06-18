@@ -6,7 +6,7 @@ import Notificacion from "../models/notification.model.js";
 
 export const obternerPublis = async (req, res)=>{
     try{
-        const publis = await Publi.find().populate("autor", "username email");
+        const publis = await Publi.find().populate("autor", "username telefono email");
 
         if (publis){
             res.json({publis})
