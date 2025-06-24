@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import ListPubli from "../api/publis";
 import Header from "../components/header.jsx"
+import { comentarPublicacion } from "../api/comentarios.js";
+import { useAuth } from "../context/AuthContext.jsx";
 
 const PubliPage = () => {
     const [publicaciones, setPublis] = useState([]);
@@ -8,6 +10,22 @@ const PubliPage = () => {
     const [loading, setLoading] = useState(true);
     const [filtro, setFiltro] = useState("");
     const [publiSeleccionada, setPubliSeleccionada] = useState(null);
+    const { user } = useAuth();
+    const [nuevoComentario, setNuevoComentario] = useState("");
+    
+const enviarComentario = async () => {
+  if (!nuevoComentario.trim()) return;
+
+  try {
+    const res = await comentarPublicacion(publiSeleccionada._id, nuevoComentario);
+    setPubliSeleccionada(res.data); // Actualiza la publicación con comentarios
+    setNuevoComentario("");
+  } catch (error) {
+    console.error("Error al comentar:", error);
+  }
+};
+    
+
 
     useEffect(() => {
         const loadPublis = async () => {
@@ -101,14 +119,26 @@ const PubliPage = () => {
             </div>
             {publiSeleccionada && (
                 <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50">
-                    <div className="bg-white rounded-lg p-6 max-w-md w-full shadow-lg relative">
+  <div className="relative w-full max-w-2xl h-[90vh] bg-white rounded-lg shadow-lg overflow-hidden flex flex-col">
+    {/* Botón de cerrar */}
+    <button
+      className="absolute top-2 right-2 text-gray-500 hover:text-gray-800 z-10"
+      onClick={() => setPubliSeleccionada(null)}
+    >
+      ✖
+    </button>
+
+    {/* Contenido con scroll */}
+    <div className="overflow-y-auto px-6 py-6 space-y-4">
+     
+
                     <button
                         className="absolute top-2 right-2 text-gray-500 hover:text-gray-800"
                         onClick={() => setPubliSeleccionada(null)}
                     >
                         ✖
                     </button>
-                    <div className="flex items-center p-4 border-b">
+                    <div className="flex items-center p-4 ">
                         <div className="w-10 h-10 rounded-full bg-pink-200 flex items-center justify-center text-white font-bold mr-3">
                             {publiSeleccionada.autor?.username?.charAt(0).toUpperCase() || "?"}
                         </div>
@@ -131,22 +161,41 @@ const PubliPage = () => {
                         Tipo: {publiSeleccionada.tipo} | Región: {publiSeleccionada?.ubicacion?.region}
                     </p>
                     <div className="mt-4">
-                            <h4 className="text-lg font-semibold text-gray-800 mb-2">💬 Comentarios</h4>
-                            {publiSeleccionada.comentarios && publiSeleccionada.comentarios.length > 0 ? (
-                                <ul className="space-y-2 max-h-48 overflow-y-auto pr-2">
-                                {publiSeleccionada.comentarios.map((comentario) => (
-                                    <li key={comentario._id} className="bg-gray-100 p-2 rounded">
-                                        <p className="text-sm text-gray-700">{comentario.texto}</p>
-                                        <p className="text-xs text-gray-500 text-right">— {comentario.autor?.username || "Anónimo"}</p>
-                                    </li>
-                                ))}
-                                </ul>
-                            ) : (
-                                <p className="text-sm text-gray-500">No hay comentarios aún.</p>
-                            )}
-                    </div>
-                    </div>
-                </div>
+  <h4 className="text-lg font-semibold text-gray-800 mb-2">💬 Comentarios</h4>
+  {publiSeleccionada.comentarios?.length > 0 ? (
+    <ul className="space-y-2 max-h-48 overflow-y-auto pr-2">
+      {publiSeleccionada.comentarios.map((comentario) => (
+        <li key={comentario._id} className="bg-gray-100 p-2 rounded">
+          <p className="text-sm text-gray-700">{comentario.texto}</p>
+          <p className="text-xs text-gray-500 text-right">
+            — {comentario.autor?.username || "Anónimo"}
+          </p>
+        </li>
+      ))}
+    </ul>
+  ) : (
+    <p className="text-sm text-gray-500">No hay comentarios aún.</p>
+  )}
+
+  {/* Formulario para nuevo comentario */}
+  <textarea
+    className="w-full mt-4 border rounded p-2 text-sm"
+    rows="2"
+    placeholder="Escribe un comentario..."
+    value={nuevoComentario}
+    onChange={(e) => setNuevoComentario(e.target.value)}
+  />
+  <button
+    onClick={enviarComentario}
+    className="mt-2 px-4 py-2 bg-pink-600 text-white rounded hover:bg-pink-700 transition text-sm"
+  >
+    Comentar
+  </button>
+</div>
+
+                    </div> {/* Cierre del scroll interno */}
+  </div> {/* Cierre del modal container */}
+</div>
             )}
         </div>
     );
