@@ -116,7 +116,7 @@ const PerfilPage = () => {
   }
 
   return (
-    <div className="bg-orange-50 min-h-screen pt-6">
+    <div className="flex-wrap min-h-screen bg-no-repeat bg-cover bg-center">
       <Header />
       {showSuccess && (
   <div className={`max-w-3xl mx-auto mb-4 px-4 transition-opacity duration-500 ${
