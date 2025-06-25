@@ -1,7 +1,7 @@
 import { Router } from "express";
 import upload from "../multerConfig.js"
 import { authRequired} from "../middlewares/validateToken.js";
-import { obternerPublis, crearPubli, agregarComentario, eliminarPubli, actualizarPubli, obtenerPublisPorUsuario } from "../controllers/publi.controllers.js";
+import { obternerPublis, crearPubli, agregarComentario, eliminarPubli, actualizarPubli, obtenerPublisPorUsuario, likeaLaPublicación } from "../controllers/publi.controllers.js";
 
 const router= Router()
 
@@ -12,5 +12,8 @@ router.put("/petsos/actualizar/:id/publi", authRequired, upload.single("imgURL")
 router.delete("/petsos/eliminar/:id/publi", authRequired, eliminarPubli)
 
 router.get("/petsos/mis-publicaciones", authRequired, obtenerPublisPorUsuario)
+
+
+router.put("/petsos/like/publi/:id", authRequired, likeaLaPublicación)
 
 export default router

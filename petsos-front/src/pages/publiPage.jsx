@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import ListPubli from "../api/publis";
 import Header from "../components/header.jsx"
-
+import { likePublicacion } from "../api/publi.js";
+import { useAuth } from "../context/AuthContext.jsx";
 const PubliPage = () => {
     const [publicaciones, setPublis] = useState([]);
     const [error, setError] = useState(null);
@@ -9,6 +10,8 @@ const PubliPage = () => {
     const [filtro, setFiltro] = useState("");
     const [publiSeleccionada, setPubliSeleccionada] = useState(null);
 
+    const { user } = useAuth();
+    const userId = user?._id;
     useEffect(() => {
         const loadPublis = async () => {
             try {
@@ -44,8 +47,29 @@ const PubliPage = () => {
         setFiltro(tipoSeleccionado);
     };
     if (publiSeleccionada) {
-  console.log("Autor seleccionado:", publiSeleccionada.autor);
-}
+        console.log("Autor seleccionado:", publiSeleccionada.autor);
+    }
+
+    const handleLike = async (publiId) => {
+        try {
+            await likePublicacion(publiId);
+
+            setPublis((prevPublis) =>
+            prevPublis.map((publi) =>
+                publi._id === publiId
+                ? {
+                    ...publi,
+                    likes: publi.likes.includes(userId)
+                        ? publi.likes.filter((id) => id !== userId)
+                        : [...publi.likes, userId],
+                    }
+                : publi
+            )
+            );
+        } catch (error) {
+            console.error("Error al dar like:", error);
+        }
+    };
 
     return (
         <div className="min-h-screen flex flex-col bg-orange-50">
@@ -94,7 +118,7 @@ const PubliPage = () => {
                         {publicaciones
                             .filter((publi) => !filtro || publi.tipo === filtro)
                             .map((publi) => (
-                                <PubliCard key={publi._id} publi={publi} onLike={() => {}}  onClick={(publi) => setPubliSeleccionada(publi)} />
+                                <PubliCard key={publi._id} publi={publi} handleLike={handleLike}  onClick={(publi) => setPubliSeleccionada(publi)} />
                         ))}
                     </div>
                 </div>
@@ -152,7 +176,7 @@ const PubliPage = () => {
     );
 };
 
-const PubliCard = ({ publi, onLike, onClick }) => {
+const PubliCard = ({ publi, handleLike, onClick }) => {
     return (
         <div className="w-full sm:w-1/2 lg:w-1/3 p-4">
 
@@ -193,7 +217,7 @@ const PubliCard = ({ publi, onLike, onClick }) => {
                         onClick={(e)=> e.stopPropagation()}
                     >
                         <button
-                            onClick={() => onLike(publi._id)}
+                            onClick={() => handleLike(publi._id)}
                             className="flex items-center space-x-1 px-3 py-1 text-sm bg-pink-600 text-white rounded hover:bg-pink-700 transition"
                         >
                             <span>❤️</span>

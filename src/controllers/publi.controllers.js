@@ -206,5 +206,36 @@ export const eliminarNotificacion = async (req, res) => {
   }
 };
 
+export const likeaLaPublicación = async (req, res) => {
+  try {
+    const publiId = req.params.id;
+    const userId = req.user?.id; // Usuario autenticado
+
+    if (!userId) {
+      return res.status(401).json({ error: "No autorizado" });
+    }
+
+    const publi = await Publi.findById(publiId);
+    if (!publi) {
+      return res.status(404).json({ error: "Publicación no encontrada" });
+    }
+
+    const index = publi.likes.indexOf(userId);
+    if (index === -1) {
+      // No ha dado like, entonces agregamos
+      publi.likes.push(userId);
+    } else {
+      // Ya había dado like, entonces removemos
+      publi.likes.splice(index, 1);
+    }
+
+    await publi.save();
+
+    res.status(200).json({ publicacion: publi });
+  } catch (error) {
+    console.error("Error en toggle like:", error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+};
 
 
