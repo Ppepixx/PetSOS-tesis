@@ -11,6 +11,7 @@ import authRoutes from "./routes/auth.routes.js";
 import userRoutes from "./routes/user.routes.js";
 import publiRoutes from "./routes/publi.routes.js"
 import notificationRoutes from "./routes/notification.routes.js";
+import reportRoutes from "./routes/report.routes.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -29,4 +30,5 @@ app.use("/api",userRoutes);
 app.use("/api",publiRoutes)
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 app.use("/api", notificationRoutes);
+app.use("/api", reportRoutes)
 export default app;

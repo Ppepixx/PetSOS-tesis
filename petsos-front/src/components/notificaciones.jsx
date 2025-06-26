@@ -127,16 +127,16 @@ function Notificaciones() {
               ) : (
                 <div className="divide-y divide-pink-50">
                   {notificaciones.map((n, index) => (
-  <div
-    key={n._id || index}
-    className={`group px-4 py-3 hover:bg-gradient-to-r hover:from-pink-25 hover:to-rose-25 transition-all duration-200 cursor-pointer relative ${
-      !n.leido ? 'bg-pink-25 border-l-4 border-l-pink-400' : ''
-    }`}
-  >
-    <div className="flex items-start gap-3">
-      {/* Avatar/Icono */}
-      <div className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-lg ${
-        !n.leido 
+                    <div
+                      key={n._id || index}
+                      className={`group px-4 py-3 hover:bg-gradient-to-r hover:from-pink-25 hover:to-rose-25 transition-all duration-200 cursor-pointer relative ${
+                      !n.leido ? 'bg-pink-25 border-l-4 border-l-pink-400' : ''
+                }`}
+              >
+            <div className="flex items-start gap-3">
+              {/* Avatar/Icono */}
+                <div className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-lg ${
+                  !n.leido 
           ? 'bg-gradient-to-r from-pink-100 to-rose-100' 
           : 'bg-gray-100'
       }`}>

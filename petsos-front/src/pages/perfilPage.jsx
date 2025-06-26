@@ -116,7 +116,7 @@ const PerfilPage = () => {
   }
 
   return (
-    <div className="bg-orange-50 min-h-screen pt-6">
+    <div className="flex-wrap min-h-screen bg-no-repeat bg-cover bg-center">
       <Header />
       {showSuccess && (
   <div className={`max-w-3xl mx-auto mb-4 px-4 transition-opacity duration-500 ${
@@ -269,15 +269,6 @@ const PerfilPage = () => {
               />
             ) : (
               <p>{user.fechadnacimiento ? new Date(user.fechadnacimiento).toLocaleDateString() : "No especificada"}</p>
-            )}
-          </div>
-
-          {/* Roles (solo lectura) */}
-          <div className="bg-orange-100 rounded-xl p-4">
-            <h2 className="text-orange-700 font-semibold mb-2">Roles</h2>
-            <p>{Array.isArray(user.roles) ? user.roles.join(", ") : "usuario"}</p>
-            {isEditing && (
-              <small className="text-gray-500 mt-1 block">Los roles solo pueden ser modificados por un administrador</small>
             )}
           </div>
         </div>

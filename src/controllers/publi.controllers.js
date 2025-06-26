@@ -6,7 +6,9 @@ import Notificacion from "../models/notification.model.js";
 
 export const obternerPublis = async (req, res)=>{
     try{
-        const publis = await Publi.find().populate("autor", "username telefono email");
+        const publis = await Publi.find()
+        .populate("autor", "username telefono email")
+        .populate("comentarios.autor", "username email")
 
         if (publis){
             res.json({publis})
@@ -121,7 +123,7 @@ export const agregarComentario = async (req, res) => {
       return res.status(401).json({ message: "No autorizado" });
     }
 
-    const publicacion = await Publi.findById(publicacionId).populate("autor");
+    const publicacion = await Publi.findById(publicacionId).populate("autor", "username");
 
     if (!publicacion) {
       return res.status(404).json({ message: "Publicación no encontrada" });
