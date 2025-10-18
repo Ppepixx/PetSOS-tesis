@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import ListPubli from "../api/publis";
-import Header from "../components/Header.jsx"
+import Header from "../components/header.jsx"
 import { likePublicacion } from "../api/publi.js";
 import { useAuth } from "../context/AuthContext.jsx";
 import { comentarPublicacion } from "../api/comentarios.js";
@@ -91,11 +91,11 @@ const userId = user?._id;
     };
 
     return (
-        <div className="min-h-screen flex flex-col bg-orange-50">
+        <div className="min-h-screen flex flex-col bg-pink-50">
             <Header />
             {/* Filtro y botón de crear publicación */}
             <div className="px-6 py-2">
-                <div className="max-w-7xl bg-orange-200 rounded-2xl mx-auto px-4 sm:px-6 lg:px-8 mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div className="max-w-7xl bg-pink-200 rounded-2xl mx-auto px-4 sm:px-6 lg:px-8 mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     {/* Botones de filtro */}
                     <div className="flex items-center gap-3 flex-wrap">
                         <label className="font-semibold text-black">Filtrar por tipo:</label>

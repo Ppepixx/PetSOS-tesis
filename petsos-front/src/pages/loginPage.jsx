@@ -47,7 +47,7 @@ const LoginPage = () => {
     }, [isAuthenticated, loginErrors, hasAttemptedLogin, navigate]);
 
     return (
-        <div className="min-h-screen flex flex-col bg-orange-50">
+        <div className="min-h-screen flex flex-col bg-pink-100">
             <Header/>
             <div className="flex flex-1 items-center justify-center">
                 

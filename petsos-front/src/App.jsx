@@ -17,6 +17,7 @@ import AdminPanel from "./pages/adminPage.jsx";
 import GestReportComentarioPage from "./pages/gestReportComentarioPage.jsx";
 import GestReportPubliPage from "./pages/gestReportPubliPage.jsx";
 import GestUsuarioPage from "./pages/gestUsuarioPage.jsx";
+import Veterinarias from "./pages/veterinariasPage.jsx";
 
 function App() {
 
@@ -35,6 +36,7 @@ function App() {
               <Route path="/perfil" element={<PerfilPage />} />
               <Route path="/FAQ" element={<FaqPage />} />
               <Route path="/consejos" element={<ConsejosPage />} />
+              <Route path="/Veterinarias" element={<Veterinarias />} />
             </Route>
 
             <Route element={<AdminRoute />}>

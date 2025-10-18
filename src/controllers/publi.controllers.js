@@ -3,118 +3,133 @@ import Notificacion from "../models/notification.model.js";
 
 
 // Para poder mostrar las publicaciones
+export const obternerPublis = async (req, res) => {
+  try {
+    const publis = await Publi.find()
+      .populate("autor", "username telefono email")
+      .populate("comentarios.autor", "username email");
 
-export const obternerPublis = async (req, res)=>{
-    try{
-        const publis = await Publi.find()
-        .populate("autor", "username telefono email")
-        .populate("comentarios.autor", "username email")
-
-        if (publis){
-            res.json({publis})
-        }else{
-            res.json({message: "No se encontraron publicaciones"})
-        }
-    } catch(error){
-        return res.status(500).json({message:"Algo salió mal"})
+    if (publis && publis.length > 0) {
+      res.json({ publis });
+    } else {
+      res.json({ message: "No se encontraron publicaciones" });
     }
-}
+  } catch (error) {
+    return res.status(500).json({ message: "Algo salió mal" });
+  }
+};
 
-// Para poder crear las publicaciones
 
+// Crear publicación
 export const crearPubli = async (req, res) => {
-    try {
-        const { titulo, descripcion, tipo, ubicacion } = req.body;
-        const autorId = req.user?.id;
+  try {
+    const { titulo, descripcion, tipo, ubicacion } = req.body;
+    const autorId = req.user?.id;
 
-        if (!autorId) {
-            return res.status(401).json({ message: "No autorizado. Usuario no autenticado." });
-        }
-
-        const nuevaPubli = new Publi({
-            titulo,
-            descripcion,
-            imgURL: req.file?.filename || "",
-            autor: autorId,
-            tipo,
-            ubicacion: {
-                comuna: ubicacion?.comuna,
-                ciudad: ubicacion?.ciudad,
-                region: ubicacion?.region
-        }
-        });
-
-        const guardarPubli = await nuevaPubli.save();
-        res.json(guardarPubli);
-    } catch (error) {
-        return res.status(500).json({ message: "La publicacion no se pudo crear" });
+    if (!autorId) {
+      return res.status(401).json({ message: "No autorizado. Usuario no autenticado." });
     }
+
+    // Validación básica de ubicacion
+    if (!ubicacion?.region || !ubicacion?.comuna) {
+      return res.status(400).json({ message: "Debe seleccionar región y comuna." });
+    }
+
+    const nuevaPubli = new Publi({
+      titulo,
+      descripcion,
+      imgURL: req.file ? [req.file.filename] : [],
+      autor: autorId,
+      tipo,
+      ubicacion: {
+        comuna: ubicacion.comuna,
+        region: ubicacion.region,
+      }
+    });
+
+    const guardarPubli = await nuevaPubli.save();
+    res.json(guardarPubli);
+  } catch (error) {
+    console.error("Error al crear la publicación:", error);
+    return res.status(500).json({ message: "La publicación no se pudo crear" });
+  }
 };
 
+
+// Actualizar publicación
 export const actualizarPubli = async (req, res) => {
-    try {
-        const { id } = req.params; 
-        const updatedData = req.body;
+  try {
+    const { id } = req.params; 
+    const updatedData = req.body;
 
-        const publicacion = await Publi.findById(id);
-        if (!publicacion) {
-        return res.status(404).json({ message: "Publicación no encontrada" });
-        }
-
-        // Verificamos que el usuario autenticado sea el autor
-        if (publicacion.autor.toString() !== req.user.id) {
-        return res.status(403).json({ message: "No tienes permiso para actualizar esta publicación" });
-        }
-
-        if (req.file){
-            updatedData.imgURL = [req.file.filename]
-        }
-        // Actualizamos con los nuevos datos
-        const publicacionActualizada = await Publi.findByIdAndUpdate(id, updatedData, {
-        new: true, // Retorna el nuevo documento actualizado
-        });
-
-        res.status(200).json({
-        message: "Publicación actualizada exitosamente",
-        publicacion: publicacionActualizada,
-        });
-
-    } catch (error) {
-        console.error("Error al actualizar la publicación:", error);
-        return res.status(500).json({ message: "Error del servidor al actualizar la publicación" });
+    const publicacion = await Publi.findById(id);
+    if (!publicacion) {
+      return res.status(404).json({ message: "Publicación no encontrada" });
     }
+
+    // Verificamos que el usuario autenticado sea el autor
+    if (publicacion.autor.toString() !== req.user.id) {
+      return res.status(403).json({ message: "No tienes permiso para actualizar esta publicación" });
+    }
+
+    // Validamos que si viene ubicacion, contenga región y comuna
+    if (updatedData.ubicacion) {
+      if (!updatedData.ubicacion.region || !updatedData.ubicacion.comuna) {
+        return res.status(400).json({ message: "Debe especificar región y comuna válidas." });
+      }
+    }
+
+    if (req.file) {
+      updatedData.imgURL = [req.file.filename];
+    }
+
+    const publicacionActualizada = await Publi.findByIdAndUpdate(id, updatedData, {
+      new: true,
+    });
+
+    res.status(200).json({
+      message: "Publicación actualizada exitosamente",
+      publicacion: publicacionActualizada,
+    });
+
+  } catch (error) {
+    console.error("Error al actualizar la publicación:", error);
+    return res.status(500).json({ message: "Error del servidor al actualizar la publicación" });
+  }
 };
 
 
+// Eliminar publicación
 export const eliminarPubli = async (req, res) => {
-    try {
-        const { id } = req.params; 
+  try {
+    const { id } = req.params; 
 
-        const publicacion = await Publi.findById(id);
-        if (!publicacion) {
-        return res.status(404).json({ message: "Publicación no encontrada" });
-        }
-
-        // Verificamos que el usuario autenticado sea el autor
-        if (publicacion.autor.toString() !== req.user.id) {
-        return res.status(403).json({ message: "No tienes permiso para eliminar esta publicación" });
-        }
-
-        await publicacion.deleteOne();
-
-        res.status(200).json({
-        message: "Publicación eliminada exitosamente",
-        publicacionEliminada: publicacion,
-        });
-
-    } catch (error) {
-        console.error("Error al eliminar la publicación:", error);
-        return res.status(500).json({ message: "Error del servidor al eliminar la publicación" });
+    const publicacion = await Publi.findById(id);
+    if (!publicacion) {
+      return res.status(404).json({ message: "Publicación no encontrada" });
     }
+
+    if (publicacion.autor.toString() !== req.user.id) {
+      return res.status(403).json({ message: "No tienes permiso para eliminar esta publicación" });
+    }
+
+    await publicacion.deleteOne();
+
+    res.status(200).json({
+      message: "Publicación eliminada exitosamente",
+      publicacionEliminada: publicacion,
+    });
+
+  } catch (error) {
+    console.error("Error al eliminar la publicación:", error);
+    return res.status(500).json({ message: "Error del servidor al eliminar la publicación" });
+  }
 };
 
+
+// Agregar comentario
 export const agregarComentario = async (req, res) => {
-    try {
+  try {
     const { texto } = req.body;
     const publicacionId = req.params.id;
     const autorId = req.user?.id;
@@ -124,16 +139,13 @@ export const agregarComentario = async (req, res) => {
     }
 
     const publicacion = await Publi.findById(publicacionId).populate("autor", "username");
-
     if (!publicacion) {
       return res.status(404).json({ message: "Publicación no encontrada" });
     }
 
-    // Añadir comentario
     publicacion.comentarios.push({ autor: autorId, texto });
     await publicacion.save();
 
-    // Crear notificación automática solo si el autor del comentario no es el mismo que el autor de la publicación
     if (String(autorId) !== String(publicacion.autor._id)) {
       const nuevaNotificacion = new Notificacion({
         receptor: publicacion.autor._id,
@@ -155,20 +167,22 @@ export const agregarComentario = async (req, res) => {
   }
 };
 
-export const obtenerPublisPorUsuario = async (req, res) => {
-    try {
-        const autorId = req.user.id
-        const publicaciones = await Publi.find({ autor: autorId }).sort({ f_creacion: -1 });
 
-        res.status(200).json(publicaciones);
-    } catch (error) {
-        console.error("Error al obtener publicaciones del usuario:", error);
-        res.status(500).json({ message: "Error del servidor" });
-    }
+// Publicaciones por usuario
+export const obtenerPublisPorUsuario = async (req, res) => {
+  try {
+    const autorId = req.user.id;
+    const publicaciones = await Publi.find({ autor: autorId }).sort({ f_creacion: -1 });
+
+    res.status(200).json(publicaciones);
+  } catch (error) {
+    console.error("Error al obtener publicaciones del usuario:", error);
+    res.status(500).json({ message: "Error del servidor" });
+  }
 };
 
 
-// Obtener todas las notificaciones del usuario autenticado
+// Notificaciones
 export const obtenerNotificacion = async (req, res) => {
   try {
     const userId = req.user?.id;
@@ -188,11 +202,9 @@ export const obtenerNotificacion = async (req, res) => {
   }
 };
 
-// Eliminar una notificación del usuario autenticado
 export const eliminarNotificacion = async (req, res) => {
   try {
     const notiId = req.params.id;
-
     const notificacion = await Notificacion.findById(notiId);
 
     if (!notificacion) {
@@ -208,10 +220,12 @@ export const eliminarNotificacion = async (req, res) => {
   }
 };
 
+
+// Likes
 export const likeaLaPublicación = async (req, res) => {
   try {
     const publiId = req.params.id;
-    const userId = req.user?.id; // Usuario autenticado
+    const userId = req.user?.id;
 
     if (!userId) {
       return res.status(401).json({ error: "No autorizado" });
@@ -224,20 +238,18 @@ export const likeaLaPublicación = async (req, res) => {
 
     const index = publi.likes.indexOf(userId);
     if (index === -1) {
-      // No ha dado like, entonces agregamos
       publi.likes.push(userId);
     } else {
-      // Ya había dado like, entonces removemos
       publi.likes.splice(index, 1);
     }
 
     await publi.save();
-
     res.status(200).json({ publicacion: publi });
   } catch (error) {
     console.error("Error en toggle like:", error);
     res.status(500).json({ error: "Error interno del servidor" });
   }
 };
+
 
 

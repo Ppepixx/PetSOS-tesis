@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { obtenerReportesPublicaciones, actualizarEstadoReporte, eliminarReporte } from "../api/reportar";
-import Header from "../components/Header";
+import Header from "../components/header";
 
 const GestReportPubliPage = () => {
     const [reportes, setReportes] = useState([]);

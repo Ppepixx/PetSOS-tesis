@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { obtenerReportesComentarios, actualizarEstadoReporte, eliminarReporte } from "../api/reportar";
-import Header from "../components/Header";
+import Header from "../components/header";
 
 const GestReportComentarioPage = () => {
     const [reportes, setReportes] = useState([]);

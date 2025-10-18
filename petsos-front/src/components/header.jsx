@@ -17,6 +17,7 @@ const Header = () => {
             <nav className="flex flex-wrap space-x-4 md:space-x-10 items-center text-gray-800 text-lg font-semibold mt-4 md:mt-0">
                 <Link to="/" className="hover:text-orange-500 transition">Inicio</Link>
                 <Link to="/publi" className="hover:text-orange-500 transition">Publicaciones</Link>
+                <Link to="/veterinarias" className="hover:text-orange-500 transition">Veterinarias</Link>
                 <Link to="/consejos" className="hover:text-orange-500 transition">Consejos</Link>
                 <Link to="/FAQ" className="hover:text-orange-500 transition">FAQ</Link>
                 

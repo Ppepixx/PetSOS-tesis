@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Header from "../components/Header";
+import Header from "../components/header";
 
 const faqsData = [
   {
@@ -161,10 +161,10 @@ const FaqPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-orange-50">
+    <div className="min-h-screen bg-pink-50">
       <Header />
       <div className="max-w-3xl mx-auto px-6 py-10">
-        <h1 className="text-4xl font-bold text-orange-900 mb-10 text-center">
+        <h1 className="text-4xl font-bold text-pink-900 mb-10 text-center">
           Preguntas Frecuentes
         </h1>
 
@@ -175,32 +175,39 @@ const FaqPage = () => {
               className="bg-white rounded-xl shadow-md border-l-4 border-orange-400"
             >
               <button
-                className="w-full text-left px-6 py-4 font-semibold text-orange-800 text-xl flex justify-between items-center focus:outline-none"
+                className="w-full text-left px-6 py-4 font-semibold text-pink-800 text-xl flex justify-between items-center focus:outline-none"
                 onClick={() => toggleCategory(idx)}
                 aria-expanded={openCategoryIndex === idx}
                 aria-controls={`faq-category-${idx}`}
               >
                 {categoryItem.category}
-                <span className="text-orange-600 text-2xl select-none">
+                <span className="text-pink-600 text-2xl select-none">
                   {openCategoryIndex === idx ? "−" : "+"}
                 </span>
               </button>
 
-              {openCategoryIndex === idx && (
-                <div id={`faq-category-${idx}`} className="px-6 pb-6 space-y-4">
+              <div
+                id={`faq-category-${idx}`}
+                className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                  openCategoryIndex === idx
+                    ? "max-h-[1000px] opacity-100"
+                    : "max-h-0 opacity-0"
+                }`}
+              >
+                <div className="px-6 pb-6 space-y-4">
                   {categoryItem.questions.map((item, qIdx) => (
                     <div
                       key={qIdx}
-                      className="p-4 rounded-md bg-orange-50 border border-orange-300"
+                      className="p-4 rounded-md bg-pink-100 border border-pink-300"
                     >
-                      <h2 className="text-xl font-semibold text-orange-800 mb-2">
+                      <h2 className="text-xl font-semibold text-pink-800 mb-2">
                         {item.q}
                       </h2>
                       <p className="text-gray-700 leading-relaxed">{item.a}</p>
                     </div>
                   ))}
                 </div>
-              )}
+              </div>
             </div>
           ))}
         </div>
@@ -210,3 +217,5 @@ const FaqPage = () => {
 };
 
 export default FaqPage;
+
+

@@ -3,10 +3,10 @@ import Header from "../components/header.jsx"
 import { usePubli } from "../context/PublicacionContext.jsx"
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
 const CrearPubliPage = ()=>{
     const { register, handleSubmit, reset } = useForm();
     const { crearPubli } = usePubli();
-
 
     const onSubmit = handleSubmit(async (data) => {
         try {
@@ -29,17 +29,16 @@ const CrearPubliPage = ()=>{
                 closeOnClick: true,
                 pauseOnHover: true,
                 draggable: true
-
             });
         }
     });
 
     return (
-        <div className="min-h-screen bg-orange-50 flex flex-col items-center">
+        <div className="min-h-screen bg-pink-50 flex flex-col items-center">
             <Header />
                 <ToastContainer
                     position="top-right"
-                    style={{ marginTop: "4rem" }} // Ajusta la distancia
+                    style={{ marginTop: "4rem" }}
                     closeOnClick
                     autoClose={3000}
                     hideProgressBar
@@ -63,7 +62,7 @@ const CrearPubliPage = ()=>{
                     placeholder="Ingresa el título de la publicación"
                     required
                     {...register("titulo")}
-                    className="w-full px-4 py-3 rounded-lg bg-zinc-100 focus:outline-none focus:ring-2 focus:ring-orange-400"
+                    className="w-full px-4 py-3 rounded-lg bg-zinc-100 focus:outline-none focus:ring-2 focus:ring-pink-400"
                     />
                 </div>
 
@@ -76,7 +75,7 @@ const CrearPubliPage = ()=>{
                     placeholder="Ingresa una descripción"
                     required
                     {...register("descripcion")}
-                    className="w-full px-4 py-3 rounded-lg bg-zinc-100 focus:outline-none focus:ring-2 focus:ring-orange-400"
+                    className="w-full px-4 py-3 rounded-lg bg-zinc-100 focus:outline-none focus:ring-2 focus:ring-pink-400"
                     />
                 </div>
 
@@ -102,7 +101,7 @@ const CrearPubliPage = ()=>{
                             type="radio"
                             value={tipo}
                             {...register("tipo")}
-                            className="accent-orange-500"
+                            className="accent-pink-500"
                             required
                         />
                         {tipo.charAt(0).toUpperCase() + tipo.slice(1)}
@@ -125,7 +124,7 @@ const CrearPubliPage = ()=>{
                         placeholder="Ej: Metropolitana"
                         required
                         {...register("ubicacion.region")}
-                        className="w-full px-4 py-3 rounded-lg bg-zinc-100 focus:outline-none focus:ring-2 focus:ring-orange-400"
+                        className="w-full px-4 py-3 rounded-lg bg-zinc-100 focus:outline-none focus:ring-2 focus:ring-pink-400"
                         />
                     </div>
 
@@ -139,7 +138,7 @@ const CrearPubliPage = ()=>{
                         placeholder="Ej: Santiago"
                         required
                         {...register("ubicacion.ciudad")}
-                        className="w-full px-4 py-3 rounded-lg bg-zinc-100 focus:outline-none focus:ring-2 focus:ring-orange-400"
+                        className="w-full px-4 py-3 rounded-lg bg-zinc-100 focus:outline-none focus:ring-2 focus:ring-pink-400"
                         />
                     </div>
 
@@ -153,7 +152,7 @@ const CrearPubliPage = ()=>{
                         placeholder="Ej: La Florida"
                         required
                         {...register("ubicacion.comuna")}
-                        className="w-full px-4 py-3 rounded-lg bg-zinc-100 focus:outline-none focus:ring-2 focus:ring-orange-400"
+                        className="w-full px-4 py-3 rounded-lg bg-zinc-100 focus:outline-none focus:ring-2 focus:ring-pink-400"
                         />
                     </div>
                     </div>
@@ -162,7 +161,7 @@ const CrearPubliPage = ()=>{
                 <div className="text-center pt-4">
                     <button
                     type="submit"
-                    className="bg-orange-500 text-white font-bold px-6 py-3 rounded-xl shadow-md hover:bg-orange-600 transition"
+                    className="bg-pink-500 text-white font-bold px-6 py-3 rounded-xl shadow-md hover:bg-pink-600 transition"
                     >
                     Publicar
                     </button>

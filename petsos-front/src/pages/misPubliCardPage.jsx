@@ -143,7 +143,7 @@ const MisPubliCard = () => {
             draggable
             theme="colored"
         />
-        <h2 className="text-2xl font-bold mb-6 text-gray-800">Mis Publicaciones</h2>
+        <h2 className="text-2xl font-bold mb-6 text-pink-700">Mis Publicaciones</h2>
         {mostrarForm && setSeleccionPubli && (
             <div className="fixed inset-0 z-50 flex justify-center items-center">
                 <div className="bg-zinc-800 text-white rounded-2xl shadow-2xl w-full max-w-xl p-6 relative">

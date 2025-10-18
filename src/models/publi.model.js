@@ -13,7 +13,8 @@ const publiSchema = new mongoose.Schema({
     },
     imgURL: {
         type: [String],
-        required: true
+        required: false,
+        default: []
     },
     f_creacion: {
         type: Date,
@@ -30,9 +31,14 @@ const publiSchema = new mongoose.Schema({
         required: true
     },
     ubicacion: {
-        comuna: String,
-        ciudad: String,
-        region: String,
+        comuna: {
+            type: String,
+            required: true,
+        },
+            region: {
+            type: String,
+            required: true,
+        },
     },
     comentarios: [{
         autor: {

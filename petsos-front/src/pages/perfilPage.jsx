@@ -136,7 +136,7 @@ const PerfilPage = () => {
               {(isEditing ? formData.username : user.username)?.charAt(0).toUpperCase()}
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-orange-600">
+              <h1 className="text-2xl font-bold text-pink-600">
                 {isEditing ? formData.username : user.username}
               </h1>
               <p className="text-gray-600">
@@ -189,8 +189,8 @@ const PerfilPage = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           
           {/* Nombre de usuario */}
-          <div className="bg-orange-100 rounded-xl p-4">
-            <h2 className="text-orange-700 font-semibold mb-2">Nombre de usuario</h2>
+          <div className="bg-pink-100 rounded-xl p-4">
+            <h2 className="text-pink-700 font-semibold mb-2">Nombre de usuario</h2>
             {isEditing ? (
               <input
                 type="text"
@@ -206,8 +206,8 @@ const PerfilPage = () => {
           </div>
 
           {/* Email */}
-          <div className="bg-orange-100 rounded-xl p-4">
-            <h2 className="text-orange-700 font-semibold mb-2">Email</h2>
+          <div className="bg-pink-100 rounded-xl p-4">
+            <h2 className="text-pink-700 font-semibold mb-2">Email</h2>
             {isEditing ? (
               <input
                 type="email"
@@ -223,8 +223,8 @@ const PerfilPage = () => {
           </div>
 
           {/* Dirección */}
-          <div className="bg-orange-100 rounded-xl p-4">
-            <h2 className="text-orange-700 font-semibold mb-2">Dirección</h2>
+          <div className="bg-pink-100 rounded-xl p-4">
+            <h2 className="text-pink-700 font-semibold mb-2">Dirección</h2>
             {isEditing ? (
               <input
                 type="text"
@@ -240,8 +240,8 @@ const PerfilPage = () => {
           </div>
 
           {/* Teléfono */}
-          <div className="bg-orange-100 rounded-xl p-4">
-            <h2 className="text-orange-700 font-semibold mb-2">Teléfono</h2>
+          <div className="bg-pink-100 rounded-xl p-4">
+            <h2 className="text-pink-700 font-semibold mb-2">Teléfono</h2>
             {isEditing ? (
               <input
                 type="tel"
@@ -257,8 +257,8 @@ const PerfilPage = () => {
           </div>
 
           {/* Fecha de nacimiento */}
-          <div className="bg-orange-100 rounded-xl p-4">
-            <h2 className="text-orange-700 font-semibold mb-2">Fecha de nacimiento</h2>
+          <div className="bg-pink-100 rounded-xl p-4">
+            <h2 className="text-pink-700 font-semibold mb-2">Fecha de nacimiento</h2>
             {isEditing ? (
               <input
                 type="date"
