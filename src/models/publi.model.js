@@ -35,7 +35,7 @@ const publiSchema = new mongoose.Schema({
             type: String,
             required: true,
         },
-            region: {
+        region: {
             type: String,
             required: true,
         },

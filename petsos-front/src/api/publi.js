@@ -19,6 +19,7 @@ export const actualizarPublicacion = async (id, updatedData)=>{
     })
 }
 
+
 export const obtenerMisPublicaciones = async () => {
     return await axios.get("/petsos/mis-publicaciones");
 };
@@ -26,3 +27,5 @@ export const obtenerMisPublicaciones = async () => {
 export const likePublicacion = async (publiId) => {
     return await axios.put(`/petsos/like/publi/${publiId}`);
 }
+
+export const getUbicacionesRequest = () => axios.get(`/ubicaciones`); // Nueva función

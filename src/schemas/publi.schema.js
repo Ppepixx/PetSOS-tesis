@@ -15,9 +15,8 @@ export const publiSchema= z.object({
     }),
 
     ubicacion: z.object({
-        region: z.string().min(1, "La región es obligatoria"),
-        ciudad: z.string().min(1, "La ciudad es obligatoria"),
-        comuna: z.string().min(1, "La comuna es obligatoria"),
+        region: z.string().min(1, "La Región es obligatoria"),
+        comuna: z.string().min(1, "La Comuna es obligatoria"),
     }),
 
 })

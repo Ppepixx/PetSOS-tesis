@@ -23,27 +23,34 @@ export const obternerPublis = async (req, res) => {
 // Crear publicación
 export const crearPubli = async (req, res) => {
   try {
-    const { titulo, descripcion, tipo, ubicacion } = req.body;
+    // 1. Extrae los campos normales
+    const { titulo, descripcion, tipo } = req.body;
+    
+    // 2. EXTRAE LOS CAMPOS "PLANOS" DE UBICACION (así es como FormData los envía)
+    const region = req.body['ubicacion.region'];
+    const comuna = req.body['ubicacion.comuna'];
+
     const autorId = req.user?.id;
 
     if (!autorId) {
       return res.status(401).json({ message: "No autorizado. Usuario no autenticado." });
     }
 
-    // Validación básica de ubicacion
-    if (!ubicacion?.region || !ubicacion?.comuna) {
+    // 3. VALIDA las nuevas variables 'region' y 'comuna'
+    if (!region || !comuna) {
       return res.status(400).json({ message: "Debe seleccionar región y comuna." });
     }
 
     const nuevaPubli = new Publi({
       titulo,
       descripcion,
-      imgURL: req.file ? [req.file.filename] : [],
+      imgURL: req.file ? [req.file.filename] : [], // Esto está perfecto
       autor: autorId,
       tipo,
+      // 4. CONSTRUYE el objeto 'ubicacion' para guardar en el modelo
       ubicacion: {
-        comuna: ubicacion.comuna,
-        region: ubicacion.region,
+        comuna: comuna,
+        region: region,
       }
     });
 
@@ -67,14 +74,14 @@ export const actualizarPubli = async (req, res) => {
       return res.status(404).json({ message: "Publicación no encontrada" });
     }
 
-    // Verificamos que el usuario autenticado sea el autor
-    if (publicacion.autor.toString() !== req.user.id) {
-      return res.status(403).json({ message: "No tienes permiso para actualizar esta publicación" });
-    }
+    // Validamos los campos planos si es que vienen en el body
+    const region = updatedData['ubicacion.region'];
+    const comuna = updatedData['ubicacion.comuna'];
 
-    // Validamos que si viene ubicacion, contenga región y comuna
-    if (updatedData.ubicacion) {
-      if (!updatedData.ubicacion.region || !updatedData.ubicacion.comuna) {
+    // Si el usuario está intentando actualizar la ubicación (envió al menos un campo de ubicación)
+    // nos aseguramos que haya enviado ambos.
+    if (region !== undefined || comuna !== undefined) {
+      if (!region || !comuna) {
         return res.status(400).json({ message: "Debe especificar región y comuna válidas." });
       }
     }
