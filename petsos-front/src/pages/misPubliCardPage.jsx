@@ -2,7 +2,9 @@ import { useState, useEffect } from "react";
 import { obtenerMisPublicaciones } from "../api/publi.js";
 import { usePubli } from "../context/PublicacionContext.jsx";
 import { toast, ToastContainer } from "react-toastify";
+import { getUbicacionesRequest } from "../api/publi.js";
 import "react-toastify/dist/ReactToastify.css";
+
 
 const MisPubliCard = () => {
     const { actualizarPubli, eliminarPubli } = usePubli();
@@ -23,6 +25,39 @@ const MisPubliCard = () => {
     });
 
     const [publiAEliminar, setPubliAEliminar] = useState(null);
+    const [ubicaciones, setUbicaciones] = useState({});
+    const [regionesList, setRegionesList] = useState([]);
+    const [comunasList, setComunasList] = useState([]);
+    
+    // Efecto para cargar las ubicaciones (regiones y comunas) desde la API
+    // Se ejecuta solo una vez al cargar el componente
+    useEffect(() => {
+        const cargarUbicaciones = async () => {
+          try {
+            const res = await getUbicacionesRequest(); 
+            setUbicaciones(res.data);
+            setRegionesList(Object.keys(res.data || {}));
+          } catch (error) {
+            console.error("Error al cargar ubicaciones:", error);
+            toast.error("Error al cargar las ubicaciones.");
+          }
+        };
+        cargarUbicaciones();
+    }, []); // Se ejecuta solo una vez
+
+    // Efecto para actualizar la lista de comunas cuando se cambia la región
+    // EN EL MODAL DE EDICIÓN
+    useEffect(() => {
+        // Usamos la región del estado 'updatedPubli' que maneja el modal
+        const selectedRegion = updatedPubli.ubicacion.region; 
+        
+        if (selectedRegion && ubicaciones[selectedRegion]) {
+          setComunasList(ubicaciones[selectedRegion]);
+        } else {
+          setComunasList([]);
+        }
+    }, [updatedPubli.ubicacion.region, ubicaciones]); // Depende de la región en el modal y de las ubicaciones cargadas
+
 
     useEffect(() => {
         const cargarPublicaciones = async () => {
@@ -62,15 +97,30 @@ const MisPubliCard = () => {
     };
 
     const handleUbicacionChange = (e) => {
-        const { name, value } = e.target;
-        setUpdatedPubli((prev) => ({
-        ...prev,
-        ubicacion: {
-            ...prev.ubicacion,
-            [name]: value,
-        },
-        }));
-    };
+        const { name, value } = e.target;
+
+        if (name === 'region') {
+            // Si cambia la región, resetea la comuna
+            setUpdatedPubli((prev) => ({
+                ...prev,
+                ubicacion: {
+                    ...prev.ubicacion,
+                    region: value,
+                    comuna: "", // Reseteamos la comuna
+                },
+            }));
+        } else {
+            // Si cambia la comuna
+            setUpdatedPubli((prev) => ({
+                ...prev,
+                ubicacion: {
+                    ...prev.ubicacion,
+                    [name]: value,
+                },
+            }));
+        }
+    };
+    // --- FIN DE CAMBIOS (REEMPLAZAR ESTA FUNCIÓN) ---
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -223,27 +273,46 @@ const MisPubliCard = () => {
                                     }
                                 />
                             </div>
-                             {/* CORRECCIÓN: Se eliminó el input de 'ciudad' y se cambió el grid a 2 columnas */}
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                <input
-                                    type="text"
-                                    name="comuna"
-                                    placeholder="Comuna"
-                                    required
-                                    className="bg-zinc-700 text-white p-3 rounded-xl border border-zinc-600 placeholder-gray-400"
-                                    value={updatedPubli.ubicacion.comuna}
-                                    onChange={handleUbicacionChange}
-                                />
-                                <input
-                                    type="text"
-                                    name="region"
-                                    placeholder="Región"
-                                    required
-                                    className="bg-zinc-700 text-white p-3 rounded-xl border border-zinc-600 placeholder-gray-400"
-                                    value={updatedPubli.ubicacion.region}
-                                    onChange={handleUbicacionChange}
-                                />
-                            </div>
+                            {/* --- INICIO DE CAMBIOS (REEMPLAZAR INPUTS DE UBICACIÓN) --- */}
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                {/* Select de Región */}
+                                <div>
+                                    <label htmlFor="region-edit" className="block text-sm text-gray-400 mb-1">Región</label>
+                                        <select
+                                            id="region-edit"
+                                            name="region" // Este 'name' es importante
+                                            required
+                                            className="w-full bg-zinc-700 text-white p-3 rounded-xl border border-zinc-600 placeholder-gray-400"
+                                            value={updatedPubli.ubicacion.region}
+                                            onChange={handleUbicacionChange}
+                                        >
+                                        <option value="">Selecciona una Región</option>
+                                        {regionesList.map((region) => (
+                                            <option key={region} value={region}>{region}</option>
+                                        ))}
+                                        </select>
+                                </div>
+
+                                {/* Select de Comuna */}
+                                <div>
+                                    <label htmlFor="comuna-edit" className="block text-sm text-gray-400 mb-1">Comuna</label>
+                                        <select
+                                            id="comuna-edit"
+                                            name="comuna" // Este 'name' es importante
+                                            required
+                                            className="w-full bg-zinc-700 text-white p-3 rounded-xl border border-zinc-600 placeholder-gray-400"
+                                            value={updatedPubli.ubicacion.comuna}
+                                            onChange={handleUbicacionChange}
+                                            disabled={!updatedPubli.ubicacion.region || comunasList.length === 0}
+                                        >
+                                        <option value="">Selecciona una Comuna</option>
+                                        {comunasList.map((comuna) => (
+                                            <option key={comuna} value={comuna}>{comuna}</option>
+                                        ))}
+                                        </select>
+                                </div>
+                            </div>
+                                {/* --- FIN DE CAMBIOS (REEMPLAZAR INPUTS DE UBICACIÓN) --- */}
 
                             <div className="flex justify-end gap-4 pt-4">
                                 <button
