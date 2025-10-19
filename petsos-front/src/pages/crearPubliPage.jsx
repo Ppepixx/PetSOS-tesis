@@ -192,11 +192,11 @@ const CrearPubliPage = ()=>{
                         </label>
                         {/* Se cambia Input por Select */}
                         <select
-                            id="region"
-                            required
-                            {...register("ubicacion.region")}
-                            className="w-full px-4 py-3 rounded-lg bg-zinc-100 focus:outline-none focus:ring-2 focus:ring-pink-400"
-                        >
+                          id="region"
+                          required
+                          {...register("ubicacion.region", { required: "La región es obligatoria" })}
+                          className="w-full px-4 py-3 rounded-lg bg-zinc-100 focus:outline-none focus:ring-2 focus:ring-pink-400"
+                        >
                             <option value="">Selecciona una Región</option>
                             {regionesList.map((region) => (
                                 <option key={region} value={region}>{region}</option>
@@ -204,21 +204,18 @@ const CrearPubliPage = ()=>{
                         </select>
                     </div>
 
-                    {/* Input de "Ciudad" ha sido eliminado */}
-
                     <div>
                         <label htmlFor="comuna" className="block text-sm font-semibold text-zinc-700 mb-1 border-t">
                         Comuna
                         </label>
                         {/* Se cambia Input por Select */}
                         <select
-                            id="comuna"
-                            required
-                            {...register("ubicacion.comuna")}
-                            className="w-full px-4 py-3 rounded-lg bg-zinc-100 focus:outline-none focus:ring-2 focus:ring-pink-400"
-                            // Se deshabilita si no hay región seleccionada
-                            disabled={!selectedRegion || comunasList.length === 0} 
-                        >
+                          id="comuna"
+                          required
+                          {...register("ubicacion.comuna", { required: "La comuna es obligatoria" })}
+                          className="w-full px-4 py-3 rounded-lg bg-zinc-100 focus:outline-none focus:ring-2 focus:ring-pink-400"
+                          disabled={!selectedRegion || comunasList.length === 0} 
+                        >
                             <option value="">Selecciona una Comuna</option>
                             {comunasList.map((comuna) => (
                                 <option key={comuna} value={comuna}>{comuna}</option>

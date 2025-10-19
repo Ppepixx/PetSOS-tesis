@@ -187,11 +187,13 @@ const userId = user?._id;
                             />
                         )}
                         <h2 className="text-xl font-bold text-pink-600">{publiSeleccionada.titulo}</h2>
-                        <p className="text-gray-700 text-sm">{publiSeleccionada.descripcion}</p>
-                        <div className="text-sm text-gray-500 mt-2">
-                            Tipo: <strong>{publiSeleccionada.tipo}</strong> | Región: <strong>{publiSeleccionada?.ubicacion?.region}</strong>
-                        </div>
-                    </div>
+                        <p className="text-gray-700 text-sm">{publiSeleccionada.descripcion}</p>
+                        <div className="text-sm text-gray-500 mt-2">
+                            <p>Tipo: <strong>{publiSeleccionada.tipo}</strong></p>
+                            <p>Ubicación: <strong>{publiSeleccionada?.ubicacion?.region}, {publiSeleccionada?.ubicacion?.comuna}</strong></p>
+                         </div>
+                     </div>
+
 
                     {/* Comentarios */}
                     <div className="mt-4 flex flex-col h-120"> 
@@ -279,7 +281,7 @@ const PubliCard = ({ publi, handleLike, onClick, usuarioActual }) => {
                         <p><strong>Tipo:</strong> {publi.tipo}</p>
                         <p>
                         <strong>Ubicación:</strong>{" "}
-                        {`${publi.ubicacion?.comuna || "-"}, ${publi.ubicacion?.ciudad || "-"}, ${publi.ubicacion?.region || "-"}`}
+                        {`${publi.ubicacion?.comuna || "-"}, ${publi.ubicacion?.region || "-"}`}
                         </p>
                     </div>
 
