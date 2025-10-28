@@ -1,5 +1,3 @@
-// src/controllers/ubicaciones.controller.js
-
 // Importamos el objeto UBICACIONES que acabamos de definir
 import UBICACIONES from '../models/ubicaciones.js';
 

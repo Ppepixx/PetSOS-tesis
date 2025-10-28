@@ -26,7 +26,7 @@ export const crearPubli = async (req, res) => {
     // 1. Extrae los campos normales
     const { titulo, descripcion, tipo } = req.body;
     
-    // 2. EXTRAE LOS CAMPOS "PLANOS" DE UBICACION (así es como FormData los envía)
+    // 2. Extrae los campos planos de ubicación ya que así es como FormData los envía
     const region = req.body['ubicacion.region'];
     const comuna = req.body['ubicacion.comuna'];
 
@@ -36,7 +36,7 @@ export const crearPubli = async (req, res) => {
       return res.status(401).json({ message: "No autorizado. Usuario no autenticado." });
     }
 
-    // 3. VALIDA las nuevas variables 'region' y 'comuna'
+    // 3. Se valida las nuevas variables 'region' y 'comuna'
     if (!region || !comuna) {
       return res.status(400).json({ message: "Debe seleccionar región y comuna." });
     }
@@ -44,10 +44,10 @@ export const crearPubli = async (req, res) => {
     const nuevaPubli = new Publi({
       titulo,
       descripcion,
-      imgURL: req.file ? [req.file.filename] : [], // Esto está perfecto
+      imgURL: req.file ? [req.file.filename] : [], 
       autor: autorId,
       tipo,
-      // 4. CONSTRUYE el objeto 'ubicacion' para guardar en el modelo
+      // 4. Se construye el objeto ubicacion para guardar en el modelo
       ubicacion: {
         comuna: comuna,
         region: region,
@@ -74,7 +74,7 @@ export const actualizarPubli = async (req, res) => {
       return res.status(404).json({ message: "Publicación no encontrada" });
     }
 
-    // Validamos los campos planos si es que vienen en el body
+    // Se validan los campos planos en caso que vengan en el body
     const region = updatedData['ubicacion.region'];
     const comuna = updatedData['ubicacion.comuna'];
 
@@ -129,6 +129,25 @@ export const eliminarPubli = async (req, res) => {
 
   } catch (error) {
     console.error("Error al eliminar la publicación:", error);
+    return res.status(500).json({ message: "Error del servidor al eliminar la publicación" });
+  }
+};
+ //Eliminar publicación siendo Admin
+export const eliminarPubliAdmin = async (req, res) => {
+  try {
+    const { id } = req.params;  
+    const publicacion = await Publi.findById(id);
+    if (!publicacion) { 
+      return res.status(404).json({ message: "Publicación no encontrada" });
+    }
+
+    await publicacion.deleteOne();
+    res.status(200).json({
+      message: "Publicación eliminada exitosamente por el administrador",
+      publicacionEliminada: publicacion,
+    });
+  } catch (error) {
+    console.error("Error al eliminar la publicación por el administrador:", error);
     return res.status(500).json({ message: "Error del servidor al eliminar la publicación" });
   }
 };

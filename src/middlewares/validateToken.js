@@ -20,8 +20,13 @@ export const authRequired = (req,res,next)=>{
 };
 
 export const isAdmin= async (req, res, next)=>{
+    try {           
     //buscar usuario
     const user= await Usuario.findById(req.user.id)
+    // Si el usuario no se encuentra después de validar el token (caso raro pero posible)
+    if (!user) {
+        return res.status(404).json({message: "Usuario no encontrado"})
+    }
     //Buscar rol del usuario
     const roles= await Rol.find({_id: {$in:user.roles}})
     //Ver si esta el rol admin
@@ -32,4 +37,10 @@ export const isAdmin= async (req, res, next)=>{
         }
     }
     return res.status(403).json({message: "Se requiere el rol de Admin"})
-}
+}catch (error) {
+    console.error("Error en la verificación de rol de administrador:", error);
+    return res.status(500).json({ message: "Error del servidor durante la verificación de rol" });
+    }   
+};
+
+
