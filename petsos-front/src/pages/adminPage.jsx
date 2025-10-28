@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import Header from "../components/header";
+import StatsComunas from "../components/statsComunas.jsx";
 
 const AdminPanel = () => {
     return (
@@ -35,6 +36,7 @@ const AdminPanel = () => {
                         <p className="text-gray-600 text-sm">Gestionar publicaciones con contenido inapropiado.</p>
                     </Link>
                 </div>
+                <StatsComunas/>
             </div>
         </div>
     );

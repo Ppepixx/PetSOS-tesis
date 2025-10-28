@@ -1,20 +1,18 @@
 import { createContext, useContext, useState } from "react";
-import { actualizarPublicacion, crearPublicacion, eliminarPublicacion } from "../api/publi";
+import { actualizarPublicacion, crearPublicacion, eliminarPublicacion, eliminarPubliAdminRequest } from "../api/publi";
 
 const PubliContext= createContext()
 
-export const usePubli= ()=>{
-    const context = useContext(PubliContext)
-
-    if (!context){
-        throw new Error("usePubli solo se puede usar dentro del PubliProvider")
-    }
-
-    return context
-}
+export const usePubli = () => {
+    const context = useContext(PubliContext);
+    if (!context) {
+        throw new Error("usePublicaciones debe ser usado dentro de un PubliProvider");
+    }
+    return context;
+};
 
 export function PubliProvider({children}){
-    const [publis, setPublis]= useState([])
+    const [publi, setPubli]= useState([])
 
     {/* --- INICIO DE LA MODIFICACIÓN --- */}
     {/* El argumento 'publi' que llega aquí YA ES el FormData desde la página */}
@@ -23,7 +21,7 @@ export function PubliProvider({children}){
             // Ya no creamos un FormData, solo lo pasamos a la API.
             // También eliminamos la línea de "ciudad".
             const response = await crearPublicacion(publi); 
-            setPublis([...publis, response.data]);
+            setPubli([...publi, response.data]);
         } catch (error) {
             console.error("Error al crear la publicación:", error);
             // Re-lanzamos el error para que la página muestre el toast de error
@@ -36,7 +34,7 @@ export function PubliProvider({children}){
         try {
             const res= await eliminarPublicacion(publi._id)
             if (res.status==200) {
-                setPublis(publis.filter((p)=> p._id !== publi._id))
+                setPubli(publi.filter((p)=> p._id !== publi._id))
             }
         } catch (error) {
             console.error("Error al eliminar la publicación", error)
@@ -68,12 +66,27 @@ export function PubliProvider({children}){
         }
     }
 
+    // AÑADE ESTA FUNCIÓN
+    const eliminarPubliAdmin = async (id) => {
+        try {
+            const res = await eliminarPubliAdminRequest(id);
+            if (res.status === 200 || res.status === 204) {
+                // Actualiza el estado para quitar la publicación eliminada de la UI
+                setPubli(publi.filter(publi => publi._id !== id));
+            }
+        } catch (error) {
+            console.error("Error al eliminar publicacion (admin)", error);
+        }
+    };
+
+
     return (
         <PubliContext.Provider value={{ 
-            publis, 
+            publi, 
             crearPubli,
             eliminarPubli,
-            actualizarPubli
+            actualizarPubli,
+            eliminarPubliAdmin
         }}>
             {children}
         </PubliContext.Provider>

@@ -28,4 +28,8 @@ export const likePublicacion = async (publiId) => {
     return await axios.put(`/petsos/like/publi/${publiId}`);
 }
 
-export const getUbicacionesRequest = () => axios.get(`/ubicaciones`); // Nueva función
+export const getUbicacionesRequest = () => axios.get(`/ubicaciones`);
+
+export const eliminarPubliAdminRequest = (id) => axios.delete(`/publis/admin/${id}`);
+
+export const getStatsComunasRequest = () => axios.get(`/publis/stats/lost-by-commune`);
