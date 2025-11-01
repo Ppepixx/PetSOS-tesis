@@ -33,3 +33,9 @@ export const getUbicacionesRequest = () => axios.get(`/ubicaciones`);
 export const eliminarPubliAdminRequest = (id) => axios.delete(`/publis/admin/${id}`);
 
 export const getStatsComunasRequest = () => axios.get(`/publis/stats/lost-by-commune`);
+
+
+export const eliminarComentarioAdmin = (publiId, comentarioId) => {
+    return axios.delete(`/publis/admin/${publiId}/comentarios/${comentarioId}`);
+};
+

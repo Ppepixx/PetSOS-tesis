@@ -152,7 +152,6 @@ export const eliminarPubliAdmin = async (req, res) => {
   }
 };
 
-
 // Agregar comentario
 export const agregarComentario = async (req, res) => {
   try {
@@ -190,6 +189,32 @@ export const agregarComentario = async (req, res) => {
   } catch (error) {
     console.error("Error al agregar comentario:", error);
     res.status(500).json({ message: "Error al agregar comentario" });
+  }
+};
+
+//Eliminar comentario siendo Admin
+export const eliminarComentarioAdmin = async (req, res) => {
+  try {
+    const { publiId, comentarioId } = req.params;
+    const publicacion = await Publi.findById(publiId);
+    if (!publicacion) {
+      return res.status(404).json({ message: "Publicación no encontrada" });
+    }
+    const comentarioIndex = publicacion.comentarios.findIndex(
+      (comentario) => comentario._id.toString() === comentarioId
+    );
+    if (comentarioIndex === -1) {
+      return res.status(404).json({ message: "Comentario no encontrado" });
+    }
+    publicacion.comentarios.splice(comentarioIndex, 1);
+    await publicacion.save();
+    res.status(200).json({
+      message: "Comentario eliminado exitosamente por el administrador",
+      publicacionActualizada: publicacion,
+    });
+  } catch (error) {
+    console.error("Error al eliminar el comentario por el administrador:", error);
+    return res.status(500).json({ message: "Error del servidor al eliminar el comentario" });
   }
 };
 

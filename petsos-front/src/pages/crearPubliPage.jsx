@@ -1,38 +1,28 @@
-// petsos-front/src/pages/crearPubliPage.jsx
-
 import { useForm } from "react-hook-form"
 import Header from "../components/header.jsx"
 import { usePubli } from "../context/PublicacionContext.jsx"
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-// --- INICIO DE CAMBIOS ---
 import { useEffect, useState } from "react"; 
-// Asegúrate de que la ruta a tu api (publi.js) sea correcta
 import { getUbicacionesRequest } from "../api/publi.js"; 
-// --- FIN DE CAMBIOS ---
+
 
 
 const CrearPubliPage = ()=>{
-    // --- INICIO DE CAMBIOS ---
-    // Añadimos 'watch' para observar cambios en el formulario
     const { register, handleSubmit, reset, watch } = useForm();
-    // --- FIN DE CAMBIOS ---
     const { crearPubli } = usePubli();
 
-    // --- INICIO DE CAMBIOS ---
-    // Estados para manejar las listas de regiones y comunas
+
     const [ubicaciones, setUbicaciones] = useState({});
     const [regionesList, setRegionesList] = useState([]);
     const [comunasList, setComunasList] = useState([]);
 
-    // Observamos el valor del campo 'ubicacion.region'
     const selectedRegion = watch('ubicacion.region');
-
-    // Efecto para cargar las ubicaciones (regiones y comunas) desde la API
+    // Efecto para cargar las ubicaciones al montar el componente
     useEffect(() => {
         const cargarUbicaciones = async () => {
           try {
-            // Esta función debe existir en tu /api/publi.js
+
             const res = await getUbicacionesRequest(); 
             setUbicaciones(res.data);
             setRegionesList(Object.keys(res.data || {}));
@@ -42,7 +32,7 @@ const CrearPubliPage = ()=>{
           }
         };
         cargarUbicaciones();
-    }, []); // Se ejecuta solo una vez al cargar la página
+    }, []); 
 
     // Efecto para actualizar la lista de comunas cuando se cambia la región
     useEffect(() => {
@@ -52,33 +42,29 @@ const CrearPubliPage = ()=>{
           setComunasList([]);
         }
     }, [selectedRegion, ubicaciones]);
-    // --- FIN DE CAMBIOS ---
+
 
 
     const onSubmit = handleSubmit(async (data) => {
         try {
-            // --- INICIO DE CAMBIOS ---
-            // Es necesario crear 'FormData' manualmente para que la imagen (imgURL)
-            // y los datos anidados (ubicacion) se envíen correctamente al backend.
+
             const formData = new FormData();
             
-            // Añadimos los campos que SÍ tenías
             formData.append('titulo', data.titulo);
             formData.append('descripcion', data.descripcion);
             formData.append('tipo', data.tipo);
             
-            // 'imgURL' es el nombre del campo de archivo, 'data.imgURL[0]' es el archivo
             if (data.imgURL && data.imgURL[0]) {
                 formData.append('imgURL', data.imgURL[0]);
             }
             
-            // Añadimos los nuevos campos de ubicación
+
             formData.append('ubicacion.region', data.ubicacion.region);
             formData.append('ubicacion.comuna', data.ubicacion.comuna);
-            // No se añade 'ubicacion.ciudad'
 
-            await crearPubli(formData); // Enviamos el FormData
-            // --- FIN DE CAMBIOS ---
+
+            await crearPubli(formData); 
+
 
             reset(); 
             toast.success("Publicación creada exitosamente.", {
@@ -122,7 +108,7 @@ const CrearPubliPage = ()=>{
                 >
                 <h2 className="text-4xl font-bold text-center text-zinc-800 mb-6">Crear Publicación</h2>
 
-                    {/* --- Tus campos se mantienen igual --- */}
+                   
                 <div>
                     <label htmlFor="titulo" className="block text-sm font-semibold text-zinc-700 mb-1 border-t">
                     Título
@@ -180,17 +166,17 @@ const CrearPubliPage = ()=>{
                     </div>
                 </div>
 
-                    {/* --- INICIO DE CAMBIOS EN UBICACIÓN --- */}
+
                 <fieldset className="pt-6">
                     <legend className="text-lg font-semibold text-zinc-800 mb-3">Ubicación</legend>
 
-                        {/* Se cambia a 2 columnas y se elimina "ciudad" */}
+
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 ">
                     <div>
                         <label htmlFor="region" className="block text-sm font-semibold text-zinc-700 mb-1 border-t">
                         Región
                         </label>
-                        {/* Se cambia Input por Select */}
+
                         <select
                           id="region"
                           required
@@ -208,7 +194,7 @@ const CrearPubliPage = ()=>{
                         <label htmlFor="comuna" className="block text-sm font-semibold text-zinc-700 mb-1 border-t">
                         Comuna
                         </label>
-                        {/* Se cambia Input por Select */}
+
                         <select
                           id="comuna"
                           required
@@ -224,7 +210,6 @@ const CrearPubliPage = ()=>{
                     </div>
                     </div>
                 </fieldset>
-                    {/* --- FIN DE CAMBIOS EN UBICACIÓN --- */}
 
                 <div className="text-center pt-4">
                     <button

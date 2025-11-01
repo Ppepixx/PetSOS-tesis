@@ -87,7 +87,7 @@ const ReportarPubli = ({ publiId }) => {
                         </button>
                     </div>
                 ) : (
-                    // VISTA DE USUARIO (Tu código original)
+                    // VISTA DE USUARIO NORMAL
                     <>
                         <p className="text-sm text-gray-700 font-semibold mb-2">Motivo del reporte:</p>
                         {motivosPublicacion.map((motivo) => (

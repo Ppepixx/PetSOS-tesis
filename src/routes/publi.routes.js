@@ -3,7 +3,7 @@ import upload from "../multerConfig.js"
 import {getUbicaciones} from '../controllers/ubi.controllers.js'; // Importar el nuevo controlador
 import {authRequired, isAdmin} from "../middlewares/validateToken.js";
 
-import { obternerPublis, crearPubli, agregarComentario, eliminarPubli, actualizarPubli, obtenerPublisPorUsuario, likeaLaPublicación, eliminarPubliAdmin } from "../controllers/publi.controllers.js";
+import { obternerPublis, crearPubli, agregarComentario, eliminarPubli, actualizarPubli, obtenerPublisPorUsuario, likeaLaPublicación, eliminarPubliAdmin, eliminarComentarioAdmin } from "../controllers/publi.controllers.js";
 import { getStatsLostPetsByCommune } from "../controllers/stats.controllers.js";
 const router= Router()
 
@@ -22,5 +22,8 @@ router.get("/publis/stats/lost-by-commune", authRequired, isAdmin, getStatsLostP
 router.put("/petsos/like/publi/:id", authRequired, likeaLaPublicación)
 
 router.delete("/publis/admin/:id", authRequired, isAdmin, eliminarPubliAdmin); // Protegida por auth y rol admin
+
+router.delete("/publis/admin/:id", authRequired, isAdmin, eliminarComentarioAdmin); // Protegida por auth y rol admin
+
 
 export default router

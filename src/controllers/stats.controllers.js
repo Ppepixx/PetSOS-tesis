@@ -1,7 +1,5 @@
 import Publi from "../models/publi.model.js";
 
-// Asegúrate de que el nombre de la función coincide con tu archivo de rutas:
-// getStatsLostPetsByCommune
 export const getStatsLostPetsByCommune = async (req, res) => {
     try {
         const stats = await Publi.aggregate([
