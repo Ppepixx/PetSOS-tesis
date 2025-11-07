@@ -1,5 +1,6 @@
 import Publi from "../models/publi.model.js"
 import Notificacion from "../models/notification.model.js";
+import mongoose from "mongoose";
 
 
 // Para poder mostrar las publicaciones
@@ -196,24 +197,50 @@ export const agregarComentario = async (req, res) => {
 export const eliminarComentarioAdmin = async (req, res) => {
   try {
     const { publiId, comentarioId } = req.params;
+
+    // --- INICIO DE LA CORRECCIÓN ---
+
+    // 1. Validar que los IDs sean ObjectIds de Mongoose válidos
+    if (!mongoose.Types.ObjectId.isValid(publiId)) {
+      return res.status(400).json({ message: "ID de publicación no válido" });
+    }
+    if (!mongoose.Types.ObjectId.isValid(comentarioId)) {
+      return res.status(400).json({ message: "ID de comentario no válido" });
+    }
+
+    // --- FIN DE LA CORRECCIÓN ---
+
     const publicacion = await Publi.findById(publiId);
     if (!publicacion) {
       return res.status(404).json({ message: "Publicación no encontrada" });
     }
+
+    // --- INICIO DE LA CORRECCIÓN ---
+    
+    // 2. Hacer la búsqueda del índice más segura
+    //    Esto evita errores si hay un comentario "null" en el array
     const comentarioIndex = publicacion.comentarios.findIndex(
-      (comentario) => comentario._id.toString() === comentarioId
+      (comentario) =>
+        comentario && comentario._id && comentario._id.toString() === comentarioId
     );
+    
+    // --- FIN DE LA CORRECCIÓN ---
+
     if (comentarioIndex === -1) {
       return res.status(404).json({ message: "Comentario no encontrado" });
     }
+    
     publicacion.comentarios.splice(comentarioIndex, 1);
     await publicacion.save();
+    
     res.status(200).json({
       message: "Comentario eliminado exitosamente por el administrador",
       publicacionActualizada: publicacion,
     });
+
   } catch (error) {
     console.error("Error al eliminar el comentario por el administrador:", error);
+    // Este error ahora solo se activará por problemas de base de datos, no por IDs inválidos
     return res.status(500).json({ message: "Error del servidor al eliminar el comentario" });
   }
 };

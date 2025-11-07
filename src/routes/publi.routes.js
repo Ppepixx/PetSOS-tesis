@@ -23,7 +23,6 @@ router.put("/petsos/like/publi/:id", authRequired, likeaLaPublicación)
 
 router.delete("/publis/admin/:id", authRequired, isAdmin, eliminarPubliAdmin); // Protegida por auth y rol admin
 
-router.delete("/publis/admin/:id", authRequired, isAdmin, eliminarComentarioAdmin); // Protegida por auth y rol admin
-
+router.delete("/publis/admin/:publiId/comentarios/:comentarioId", authRequired, isAdmin, eliminarComentarioAdmin); // Protegida por auth y rol admin
 
 export default router

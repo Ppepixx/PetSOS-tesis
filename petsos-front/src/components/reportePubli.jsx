@@ -124,3 +124,4 @@ const ReportarPubli = ({ publiId }) => {
 };
 
 export default ReportarPubli;
+

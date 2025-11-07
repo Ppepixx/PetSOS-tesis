@@ -81,18 +81,23 @@ export function PubliProvider({children}){
     };
 
     //Eliminar comentario admin
-    
-    const eliminarComentarioAdmin = async (publiId, comentarioId) => {
-        try {
-            // 2. USA EL NUEVO NOMBRE DE LA FUNCIÓN IMPORTADA
-            const res = await eliminarComentarioAdminRequest(publiId, comentarioId); // <-- ¡CAMBIO AQUÍ!
-            
-            // Opcional: Actualiza el estado si es necesario
-            console.log(res.data.message);
-        } catch (error) {
-            console.error("Error en el contexto al eliminar comentario:", error);
-        }
-    };
+    const eliminarComentarioAdmin = async (publiId, comentarioId) => {
+
+        // --- INICIO DE LA CORRECCIÓN ---
+        // Añade estos console.log para ver qué valores estás recibiendo
+        console.log("Valores recibidos en el contexto para eliminar:");
+        console.log("ID de Publicación (publiId):", publiId);
+        console.log("ID de Comentario (comentarioId):", comentarioId);
+        // --- FIN DE LA CORRECCIÓN ---
+
+        try {
+            const res = await eliminarComentarioAdminRequest(publiId, comentarioId);
+            
+            console.log(res.data.message);
+        } catch (error) {
+            console.error("Error en el contexto al eliminar comentario:", error);
+        }
+    };
 
     return (
         <PubliContext.Provider value={{ 
