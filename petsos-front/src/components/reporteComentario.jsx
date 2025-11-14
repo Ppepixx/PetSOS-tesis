@@ -90,7 +90,7 @@ const ReportarComentario = ({ publiId, comentarioId }) => {
                         <p className="text-sm text-gray-700 font-semibold mb-2 px-4">Acción de Admin:</p>
                         <button
                             onClick={handleAdminDelete}
-                            className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-100 font-bold"
+                            className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-pink-100 font-bold"
                         >
                             Eliminar Comentario
                         </button>

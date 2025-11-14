@@ -1,83 +1,139 @@
-import { useEffect, useState } from "react";
-import { getStatsComunasRequest } from "../api/publi";
+import React, { useEffect, useState } from 'react';
+// 1. Importamos las nuevas librerías
+import { Bar } from 'react-chartjs-2';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+import { getStatsComunasRequest } from '../api/publi.js';
+// Usamos los componentes de MUI para los estados de carga y error
+import { Box, Typography, CircularProgress, Alert } from '@mui/material';
 
-
-// Función para poner la primera letra en mayúscula (ej: "perdido" -> "Perdido")
-const capitalize = (s) => {
-    if (typeof s !== 'string') return '';
-    return s.charAt(0).toUpperCase() + s.slice(1);
-};
+// 2. Registramos los componentes que Chart.js necesita para funcionar
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 function StatsComunas() {
-    const [stats, setStats] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+  // 'chartData' tendrá los datos en el formato que Chart.js necesita
+  const [chartData, setChartData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-    useEffect(() => {
-        async function loadStats() {
-            try {
-                const res = await getStatsComunasRequest();
-                
-                // Esta línea espera un objeto { stats: [...] }
-                if (res.data && Array.isArray(res.data.stats)) {
-                    setStats(res.data.stats);
-                } else {
-                    console.error("La respuesta de la API no tiene el formato esperado:", res.data);
-                    setStats([]);
-                }
-            } catch (error) {
-                console.error("Error cargando stats", error);
-                setError("No se pudieron cargar las estadísticas.");
-            } finally {
-                setLoading(false);
-            }
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        setLoading(true);
+        const res = await getStatsComunasRequest();
+
+        if (Array.isArray(res.data)) {
+          // 3. Transformamos los datos de la API:
+          // La API entrega: [{ comuna: 'A', count: 5 }, { comuna: 'B', count: 10 }]
+          // Chart.js necesita: { labels: ['A', 'B'], datasets: [{ data: [5, 10] }] }
+          
+          const labels = res.data.map(item => item.comuna);
+          const dataPoints = res.data.map(item => item.count);
+
+          setChartData({
+            labels: labels,
+            datasets: [
+              {
+                label: 'N° Publicaciones',
+                data: dataPoints,
+                backgroundColor: 'rgba(244, 114, 182, 0.7)', // Color verde de tu app con transparencia
+                borderColor: 'rgb(244, 114, 182)',
+                borderWidth: 1,
+              },
+            ],
+          });
+          setError(null);
+
+        } else {
+          console.error("La respuesta de la API no es un array:", res.data);
+          setError("La respuesta de la API no tiene el formato esperado.");
         }
-        loadStats();
-    }, []);
+      } catch (err) {
+        console.error("Error cargando stats:", err);
+        setError("No se pudieron cargar las estadísticas.");
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    if (loading) return <p className="text-center text-gray-500">Cargando estadísticas...</p>;
-    if (error) return <p className="text-center text-red-500">{error}</p>;
+    fetchStats();
+  }, []);
 
+  // 4. Opciones del gráfico (¡aquí lo hacemos horizontal!)
+  const options = {
+    indexAxis: 'y', // <-- Esto gira el gráfico para que sea horizontal
+    elements: {
+      bar: {
+        borderWidth: 2,
+      },
+    },
+    responsive: true, // Hace que el gráfico se adapte al contenedor
+    maintainAspectRatio: false, // <-- Importante para que se ajuste a la altura dinámica
+    plugins: {
+      legend: {
+        position: 'top',
+      },
+      title: {
+        display: false, // Ya tenemos un título en el contenedor
+      },
+    },
+  };
+
+  // --- Renderizado de Estados ---
+
+  if (loading) {
     return (
-        <div className="mt-8 p-6 bg-gray-50 rounded-xl border border-gray-200">
-            <h3 className="text-2xl font-bold text-gray-800 mb-4 text-center">
-                Estadísticas por Comuna
-            </h3>
-            
-            <div className="grid md:grid-cols-3 gap-6">
-                
-                {stats.map((categoria) => (
-                    <div key={categoria.estado} className="p-4 border rounded-lg bg-white shadow-sm">
-                        
-                        <h4 className="text-xl font-semibold text-pink-700 mb-3 text-center">
-                            {capitalize(categoria.estado)}
-                        </h4>
-                        
-                        {categoria.comunas.length === 0 ? (
-                            <p className="text-center text-gray-500 text-sm">Sin datos.</p>
-                        ) : (
-                            <ol className="list-decimal list-inside space-y-2">
-                                {categoria.comunas.map((item) => (
-                                    <li key={item.comuna} className="text-gray-700">
-                                        <span className="font-medium">{item.comuna}:</span> 
-                                        <span className="font-bold ml-2">
-                                            {item.count} {item.count > 1 ? 'casos' : 'caso'}
-                                        </span>
-                                    </li>
-                                ))}
-                            </ol>
-                        )}
-                    </div>
-                ))}
-
-                {stats.length === 0 && !loading && (
-                    <p className="text-center text-gray-500 md:col-span-3">
-                        No hay datos de publicaciones para mostrar.
-                    </p>
-                )}
-            </div>
-        </div>
+      <Box sx={{ display: 'flex', justifyContent: 'center', p: 4 }}>
+        <CircularProgress />
+      </Box>
     );
+  }
+
+  if (error) {
+    return <Alert severity="error" sx={{ m: 2 }}>{error}</Alert>;
+  }
+
+  // Si no hay datos (o chartData está vacío)
+  if (!chartData || chartData.labels.length === 0) {
+    return (
+      <Typography sx={{ p: 3, color: 'text.secondary', textAlign: 'center' }}>
+        No hay datos de publicaciones por comuna para mostrar.
+      </Typography>
+    );
+  }
+
+  // 5. ¡Mostrar el gráfico!
+  
+  // Calculamos una altura dinámica para que las barras no se vean apretadas
+  const chartHeight = chartData.labels.length * 40 + 150; // 40px por barra + 150px de márgenes
+
+  return (
+    // Usamos los estilos de Tailwind que ya tenías para el contenedor
+    <div className="mt-8 p-6 bg-gray-50 rounded-xl border border-gray-200">
+      <h3 className="text-2xl font-bold text-gray-800 mb-4 text-center">
+        Comunas donde se realizan publicaciones
+      </h3>
+
+      {/* Usamos un Box de MUI para darle una altura dinámica al gráfico */}
+      <Box sx={{ height: `${chartHeight}px`, width: '100%', position: 'relative' }}>
+        <Bar options={options} data={chartData} />
+      </Box>
+    </div>
+  );
 }
 
 export default StatsComunas;

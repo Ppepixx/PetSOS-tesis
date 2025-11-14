@@ -201,8 +201,8 @@ const MisPubliCard = () => {
             />
             <h2 className="text-2xl font-bold mb-6 text-pink-700">Mis Publicaciones</h2>
             {mostrarForm && setSeleccionPubli && (
-                <div className="fixed inset-0 z-50 flex justify-center items-center bg-black bg-opacity-50">
-                    <div className="bg-zinc-800 text-white rounded-2xl shadow-2xl w-full max-w-xl p-6 relative">
+                <div className="fixed inset-0 z-50 flex justify-center items-center bg-black/30 backdrop-blur-sm bg-opacity-50">
+                    <div className="bg-pink-100 text-pink-800 rounded-2xl shadow-2xl w-full max-w-xl p-6 relative">
                         <button
                             onClick={handleCloseForm}
                             className="absolute top-4 right-4 text-gray-300 hover:text-white text-3xl font-light"
@@ -217,7 +217,7 @@ const MisPubliCard = () => {
                                 name="titulo"
                                 placeholder="¿Cuál es el título?"
                                 required
-                                className="w-full bg-zinc-700 text-white p-3 rounded-xl border border-zinc-600 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white"
+                                className="w-full bg-white text-black p-3 rounded-xl border border-orange-400 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white"
                                 value={updatedPubli.titulo}
                                 onChange={handleInputChange}
                             />
@@ -225,13 +225,13 @@ const MisPubliCard = () => {
                                 name="descripcion"
                                 placeholder="Escribe una descripción..."
                                 required
-                                className="w-full bg-zinc-700 text-white p-3 rounded-xl border border-zinc-600 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white"
+                                className="w-full bg-white text-black p-3 rounded-xl border border-orange-400 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white"
                                 rows="3"
                                 value={updatedPubli.descripcion}
                                 onChange={handleInputChange}
                             />
                             <div>
-                                <label className="block text-sm text-gray-400 mb-2">Tipo de publicación:</label>
+                                <label className="block text-sm text-pink-800 mb-2">Tipo de publicación:</label>
                                 <div className="flex gap-4">
                                     {[
                                     { label: "Rescate", value: "rescate" },
@@ -243,8 +243,8 @@ const MisPubliCard = () => {
                                         className={`cursor-pointer px-4 py-2 rounded-xl border text-sm font-medium transition-all duration-200
                                         ${
                                             updatedPubli.tipo === opcion.value
-                                            ? "bg-white text-black border-yellow-200 shadow-lg"
-                                            : "bg-zinc-700 text-gray-200 border-zinc-500 hover:bg-zinc-600"
+                                            ? "bg-zinc-300 text-black border-orange-500 shadow-lg"
+                                            : "bg-white text-black border-orange-400 hover:bg-zinc-200"
                                         }`}
                                     >
                                         <input
@@ -263,11 +263,11 @@ const MisPubliCard = () => {
                             </div>
                             {/* Imagen */}
                             <div className="flex flex-col gap-2">
-                                <label className="text-sm text-gray-400">Cambiar imagen (opcional):</label>
+                                <label className="text-sm text-pink-800">Cambiar imagen (opcional):</label>
                                 <input
                                     type="file"
                                     accept="image/png, image/jpeg"
-                                    className="bg-zinc-700 text-white p-2 rounded-xl"
+                                    className="bg-white text-black p-2 rounded-xl"
                                     onChange={(e) =>
                                     setUpdatedPubli({ ...updatedPubli, imgURL: e.target.files[0] })
                                     }
@@ -277,12 +277,12 @@ const MisPubliCard = () => {
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                 {/* Select de Región */}
                                 <div>
-                                    <label htmlFor="region-edit" className="block text-sm text-gray-400 mb-1">Región</label>
+                                    <label htmlFor="region-edit" className="block text-sm text-pink-800 mb-1">Región</label>
                                         <select
-                                            id="region-edit"
+                                            id="region-edit"    
                                             name="region" // Este 'name' es importante
                                             required
-                                            className="w-full bg-zinc-700 text-white p-3 rounded-xl border border-zinc-600 placeholder-gray-400"
+                                            className="w-full bg-white text-black p-3 rounded-xl border border-orange-400 placeholder-gray-400"
                                             value={updatedPubli.ubicacion.region}
                                             onChange={handleUbicacionChange}
                                         >
@@ -295,12 +295,12 @@ const MisPubliCard = () => {
 
                                 {/* Select de Comuna */}
                                 <div>
-                                    <label htmlFor="comuna-edit" className="block text-sm text-gray-400 mb-1">Comuna</label>
+                                    <label htmlFor="comuna-edit" className="block text-sm text-pink-800 mb-1">Comuna</label>
                                         <select
                                             id="comuna-edit"
                                             name="comuna" // Este 'name' es importante
                                             required
-                                            className="w-full bg-zinc-700 text-white p-3 rounded-xl border border-zinc-600 placeholder-gray-400"
+                                            className="w-full bg-white text-black p-3 rounded-xl border border-orange-400 placeholder-gray-400"
                                             value={updatedPubli.ubicacion.comuna}
                                             onChange={handleUbicacionChange}
                                             disabled={!updatedPubli.ubicacion.region || comunasList.length === 0}
@@ -312,8 +312,7 @@ const MisPubliCard = () => {
                                         </select>
                                 </div>
                             </div>
-                                {/* --- FIN DE CAMBIOS (REEMPLAZAR INPUTS DE UBICACIÓN) --- */}
-
+                        
                             <div className="flex justify-end gap-4 pt-4">
                                 <button
                                     type="button"
@@ -324,7 +323,7 @@ const MisPubliCard = () => {
                                 </button>
                                 <button
                                     type="submit"
-                                    className="bg-blue-600 text-white px-4 py-2 rounded-xl hover:bg-blue-700 transition"
+                                    className="bg-green-400 text-white px-4 py-2 rounded-xl hover:bg-green-700 transition"
                                 >
                                     Guardar
                                 </button>
@@ -351,7 +350,7 @@ const MisPubliCard = () => {
                             <h3 className="text-lg font-semibold text-gray-800 mb-2">{publi.titulo}</h3>
                             <p className="text-gray-600 text-sm">{publi.descripcion}</p>
                             {publi.ubicacion && (
-                            // CORRECCIÓN: Se muestra 'comuna' y 'region' en lugar de 'ciudad'
+                            //  Se muestra 'comuna' y 'region' en lugar de 'ciudad'
                             <p className="mt-2 text-xs text-gray-400">
                                 📍 {publi.ubicacion.comuna}, {publi.ubicacion.region}
                             </p>
@@ -376,13 +375,13 @@ const MisPubliCard = () => {
                     </div>
                 )}
                 {publiAEliminar && (
-                    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+                    <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex justify-center items-center z-50">
                         <div className="bg-white rounded-xl shadow-lg p-6 max-w-sm w-full">
                             <h3 className="text-lg font-semibold mb-4 text-gray-900">
                             ¿Estás seguro que quieres eliminar esta publicación?
                             </h3>
                             <p className="mb-6 text-gray-700">{publiAEliminar.titulo}</p>
-                            {/* CORRECCIÓN: Se accede al primer elemento del array de imgURL */}
+                            {/* Se accede al primer elemento del array de imgURL */}
                             {publiAEliminar.imgURL && publiAEliminar.imgURL.length > 0 && (
                                 <img
                                 src={`http://localhost:4000/uploads/${publiAEliminar.imgURL[0]}`}

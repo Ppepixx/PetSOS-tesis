@@ -4,7 +4,7 @@ import {getUbicaciones} from '../controllers/ubi.controllers.js'; // Importar el
 import {authRequired, isAdmin} from "../middlewares/validateToken.js";
 
 import { obternerPublis, crearPubli, agregarComentario, eliminarPubli, actualizarPubli, obtenerPublisPorUsuario, likeaLaPublicación, eliminarPubliAdmin, eliminarComentarioAdmin } from "../controllers/publi.controllers.js";
-import { getStatsLostPetsByCommune } from "../controllers/stats.controllers.js";
+
 const router= Router()
 
 router.get("/petsos/publis", authRequired, obternerPublis)
@@ -17,7 +17,6 @@ router.get("/petsos/mis-publicaciones", authRequired, obtenerPublisPorUsuario)
 
 router.get("/ubicaciones", getUbicaciones);// Ruta para obtener las ubicaciones
 
-router.get("/publis/stats/lost-by-commune", authRequired, isAdmin, getStatsLostPetsByCommune);
 
 router.put("/petsos/like/publi/:id", authRequired, likeaLaPublicación)
 

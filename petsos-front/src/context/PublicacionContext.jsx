@@ -53,7 +53,7 @@ export function PubliProvider({children}){
             if (res.status==200) {
                 const updatedPubli = res.data.publicacion
 
-                setPublis((prevPublis)=>
+                setPubli((prevPublis)=>
                     prevPublis.map((p) =>
                         p._id === publi._id ? updatedPubli : p
                     )

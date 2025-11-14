@@ -42,7 +42,7 @@ const handleEstadoChange = async (reporteId, nuevoEstado) => {
                 <h1 className="text-2xl font-bold mb-4">Gestión de Reportes de Comentarios</h1>
                 <div className="overflow-x-auto">
                     <table className="min-w-full border border-gray-300 rounded">
-                        <thead className="bg-red-100">
+                        <thead className="bg-pink-100">
                             <tr>
                                 <th className="py-2 px-4 border-b">Motivo</th>
                                 <th className="py-2 px-4 border-b">Comentario</th>
